@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.RentChargeMapper">
+
+    <sql id="baseResult">
+        rc.id,
+        rc.rent_id AS rentId,
+        rc.staff_code AS staffCode,
+        rc.plan_status AS planStatus,
+        rc.create_date AS createDate
+    </sql>
+
+    <sql id="baseParam">
+        <if test="rentCharge.staffCode != null and rentCharge.staffCode != ''">
+            AND rc.staff_code = #{rentCharge.staffCode}
+        </if>
+        <if test="rentCharge.planStatus != null">
+            AND rc.plan_status = #{rentCharge.planStatus}
+        </if>
+        <if test="rentCharge.communityCode != null and rentCharge.communityCode != ''">
+            AND ci.code = #{rentCharge.communityCode}
+        </if>
+        <if test="rentCharge.houseCode != null and rentCharge.houseCode != ''">
+            AND hi.code = #{rentCharge.houseCode}
+        </if>
+        <if test="rentCharge.communityName != null and rentCharge.communityName != ''">
+            AND ci.community_name LIKE CONCAT('%',#{rentCharge.communityName},'%')
+        </if>
+        <if test="rentCharge.businessDistrict != null and rentCharge.businessDistrict != ''">
+            AND ci.business_district LIKE CONCAT('%',#{rentCharge.businessDistrict},'%')
+        </if>
+        <if test="rentCharge.province != null and rentCharge.province != ''">
+            AND ci.province = #{rentCharge.province}
+        </if>
+        <if test="rentCharge.city != null and rentCharge.city != ''">
+            AND ci.city = #{rentCharge.city}
+        </if>
+        <if test="rentCharge.area != null and rentCharge.area != ''">
+            AND ci.area = #{rentCharge.area}
+        </if>
+    </sql>
+
+    <!-- 查询租房信息包括房屋编号与小区编号 -->
+    <select id="selectRentChargeWithHouse" resultType="cc.mrbird.febs.cos.entity.RentCharge">
+        SELECT rc.*, hi.code AS houseCode, ci.code AS communityCode FROM rent_charge rc
+        LEFT JOIN rent_info ri ON (ri.id = rc.rent_id)
+        LEFT JOIN house_info hi ON (hi.code = ri.house_code)
+        LEFT JOIN community_info ci ON (ci.code = hi.community_code)
+        WHERE 1 = 1
+    </select>
+
+    <!-- 查询租房信息以及房屋小区信息 -->
+    <select id="selectRentChargeList" resultType="cc.mrbird.febs.cos.entity.vo.RentChargeVo">
+        SELECT rc.*, hi.code AS houseCode, ci.code AS communityCode,
+        hi.address AS houseAddress,
+        hi.indoor_map AS indoorMap,
+        hi.decoration_type AS decorationType,
+        hi.house_type AS houseType,
+        hi.tags,
+        ci.community_name AS communityName,
+        ci.business_district AS businessDistrict,
+        ci.province,
+        ci.city,
+        ci.area,
+        hi.longitude,
+        hi.latitude,
+        ri.rent_price AS rentPrice,
+        ri.flag,
+        YEAR(rc.check_date) AS checkYear,
+        MONTH(rc.check_date) AS checkMonth
+        FROM rent_charge rc
+        LEFT JOIN rent_info ri ON (ri.id = rc.rent_id)
+        LEFT JOIN house_info hi ON (hi.code = ri.house_code)
+        LEFT JOIN community_info ci ON (ci.code = hi.community_code)
+        WHERE 1 = 1
+        <include refid="baseParam"/>
+    </select>
+
+    <!-- 获取租房信息详情 -->
+    <select id="selectChargeDetail" resultType="cc.mrbird.febs.cos.entity.vo.RentChargeDetailVo">
+        SELECT
+        rc.rent_id AS rentId,
+        rc.id AS chargeId,
+        rc.staff_code AS staffCode,
+        si.staff_name AS staffName,
+        hi.code AS houseCode,
+        hi.owner_code AS ownerUserCode,
+        ci.code AS communityCode,
+        hi.address AS houseAddress,
+        ci.community_name AS communityName,
+        ci.business_district AS businessDistrict,
+        ci.province,
+        ci.city,
+        ci.area,
+        ri.rent_price AS contractPrice
+        FROM rent_charge rc
+        LEFT JOIN rent_info ri ON (ri.id = rc.rent_id)
+        LEFT JOIN house_info hi ON (hi.code = ri.house_code)
+        LEFT JOIN community_info ci ON (ci.code = hi.community_code)
+        LEFT JOIN staff_info si ON (si.staff_code = rc.staff_code)
+        WHERE 1 = 1
+        AND rc.id = #{chargeId}
+    </select>
+
+    <!-- 查询未评价数据 -->
+    <select id="selectLastRentEvaluation" resultType="cc.mrbird.febs.cos.entity.vo.RentChargeEvaluationVo">
+        SELECT
+        rc.rent_id AS rentId,
+        rc.staff_code AS staffCode,
+        ri.house_code AS houseCode,
+        dr.rent_user_code AS userCode
+        FROM
+        rent_charge rc
+        LEFT JOIN rent_info ri ON ( ri.id = rc.rent_id )
+        LEFT JOIN delivery_review dr ON ( dr.charge_id = rc.id )
+        WHERE
+        rc.plan_status = 2
+        AND dr.rent_user_code IS NOT NULL
+        AND DATE_SUB( CURDATE(), INTERVAL 1 DAY ) = date( rc.check_date )
+        GROUP BY rc.rent_id
+    </select>
+</mapper>

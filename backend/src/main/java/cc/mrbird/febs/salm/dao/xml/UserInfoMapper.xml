@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.salm.dao.UserInfoMapper">
+
+    <!-- 分页获取客户信息 -->
+    <select id="selectUserPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        ui.id,
+        ui.`name`,
+        ui.phone,
+        ui.address,
+        ui.province,
+        ui.city,
+        ui.area,
+        ui.status,
+        ui.create_date,
+        ui.code
+        FROM
+        user_info ui
+        WHERE 1 = 1
+        <if test="userInfo.name != null and userInfo.name != ''">
+            AND ui.`name` LIKE CONCAT('%',#{userInfo.name},'%')
+        </if>
+        <if test="userInfo.phone != null and userInfo.phone != ''">
+            AND ui.phone LIKE CONCAT('%',#{userInfo.phone},'%')
+        </if>
+        <if test="userInfo.code != null and userInfo.code != ''">
+            AND ui.code LIKE CONCAT('%',#{userInfo.code},'%')
+        </if>
+        <if test="userInfo.status != null">
+            AND ui.status = #{userInfo.status}
+        </if>
+        ORDER BY ui.create_date DESC
+    </select>
+</mapper>

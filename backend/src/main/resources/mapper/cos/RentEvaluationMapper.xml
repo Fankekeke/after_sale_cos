@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.RentEvaluationMapper">
+
+    <!-- 分页获取租房评价信息 -->
+    <select id="selectRentEvaluationPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        re.*,
+        ci.community_name AS communityName,
+        hi.address AS houseAddress,
+        hi.city,
+        hi.area,
+        hi.province,
+        ui.user_name AS userName,
+        ui.avatar
+        FROM
+        rent_evaluation re
+        LEFT JOIN house_info hi ON ( re.house_code = hi.`code` )
+        LEFT JOIN community_info ci ON ( ci.`code` = hi.community_code )
+        LEFT JOIN user_info ui ON ( ui.`code` = re.user_code )
+        WHERE
+        1 = 1
+        ORDER BY re.create_date DESC
+    </select>
+</mapper>

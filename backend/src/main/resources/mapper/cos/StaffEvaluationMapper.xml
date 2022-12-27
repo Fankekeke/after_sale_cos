@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.StaffEvaluationMapper">
+
+    <!-- 分页获取员工评价信息 -->
+    <select id="selectStaffEvaluationPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        se.*,
+        ui.user_name AS userName,
+        ui.avatar AS userAvatar,
+        si.staff_name AS staffName,
+        si.avatar
+        FROM
+        staff_evaluation se
+        LEFT JOIN staff_info si ON (si.staff_code = se.staff_code)
+        LEFT JOIN user_info ui ON ( ui.`code` = se.user_code )
+        WHERE
+        1 = 1
+        ORDER BY se.create_date DESC
+    </select>
+</mapper>

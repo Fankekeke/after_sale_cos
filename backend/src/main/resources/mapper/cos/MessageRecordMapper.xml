@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.MessageRecordMapper">
+
+    <!-- 分页查询消息发送记录 -->
+    <select id="selectMessageRecordPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        mr.*,
+        mt.title,
+        mt.content
+        FROM
+        message_record mr
+        LEFT JOIN message_template mt ON (mt.id = mr.template_id)
+        WHERE 1 = 1
+        ORDER BY mr.create_date DESC
+    </select>
+</mapper>

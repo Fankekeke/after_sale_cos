@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.SysCityMapper">
+
+    <sql id="baseResult">
+        city_a.id,
+        city_a.name AS name,
+        city_a.parent_id AS parentId,
+        city_a.initial,
+        city_a.initials,
+        city_a.pinyin,
+        city_a.extra,
+        city_a.suffix,
+        city_a.code,
+        city_a.area_code AS areaCode
+    </sql>
+
+    <sql id="baseParam">
+        <if test="sysCity.suffix != null and sysCity.suffix != ''">
+            AND city_a.suffix = #{sysCity.suffix}
+        </if>
+        <if test="sysCity.name != null and sysCity.name != ''">
+            AND city_b.`name` LIKE CONCAT('%',#{sysCity.name},'%')
+        </if>
+        <if test="sysCity.initials != null and sysCity.initials != ''">
+            AND city_a.`initials` LIKE CONCAT('%',#{sysCity.initials},'%')
+        </if>
+    </sql>
+
+    <select id="getCityByPage" resultType="java.util.LinkedHashMap" parameterType="cc.mrbird.febs.cos.entity.SysCity">
+        SELECT
+        <include refid="baseResult"/>,
+        city_b.`name` AS parent
+        FROM
+        sys_city city_a
+        LEFT JOIN sys_city city_b ON (city_a.parent_id = city_b.id)
+        WHERE 1 = 1
+        <include refid="baseParam"/>
+    </select>
+
+</mapper>

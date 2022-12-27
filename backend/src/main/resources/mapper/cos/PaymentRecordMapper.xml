@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.PaymentRecordMapper">
+
+    <sql id="baseResult">
+        pr.id,
+        pr.contract_code,
+        pr.rent_user_code,
+        pr.amount,
+        pr.rent_day,
+        pr.start_date,
+        pr.end_date,
+        pr.payment_type,
+        pr.create_date
+    </sql>
+
+    <sql id="baseParam">
+        <if test="paymentRecord.rentUser != null and paymentRecord.rentUser != ''">
+            AND ui.user_name LIKE CONCAT('%',#{paymentRecord.rentUser},'%')
+        </if>
+        <if test="paymentRecord.contractCode != null and paymentRecord.contractCode != ''">
+            AND pr.contract_code LIKE CONCAT('%',#{paymentRecord.contractCode},'%')
+        </if>
+        <if test="paymentRecord.paymentType != null">
+            AND pr.payment_type = #{paymentRecord.paymentType}
+        </if>
+    </sql>
+
+    <!-- 分页获取缴费记录 -->
+    <select id="selectRecordPage" resultType="java.util.LinkedHashMap">
+        SELECT <include refid="baseResult"/>,
+        ui1.user_name AS sendUserName,
+        ui1.avatar AS sendUserAvatar
+        FROM payment_record pr
+        LEFT JOIN user_info ui1 ON ( ui1.code = pr.rent_user_code )
+        WHERE 1 = 1
+        <include refid="baseParam"/>
+        ORDER BY pr.create_date DESC
+    </select>
+
+    <!-- 本月收入 -->
+    <select id="selectAmount" resultType="java.math.BigDecimal">
+        SELECT
+        IFNULL(SUM( pr.amount ), 0)
+        FROM
+        payment_record pr
+        WHERE
+        DATE_FORMAT( pr.create_date, '%Y%m' ) = DATE_FORMAT(CURDATE(),'%Y%m')
+    </select>
+
+    <!-- 查询本月押金交付次数 -->
+    <select id="selectRentStartByMonth" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM payment_record pr WHERE DATE_FORMAT( pr.create_date, '%Y%m' ) = DATE_FORMAT(CURDATE(),'%Y%m') AND pr.payment_type = '2'
+    </select>
+
+    <!-- 近十天收入统计 -->
+    <select id="selectLastRentPayment" resultType="java.util.LinkedHashMap">
+        SELECT
+        DATE_FORMAT( spo.days, '%m-%d' ) AS days,
+        IFNULL( SUM( pr.amount ), 0 ) AS price
+        FROM
+        (
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 0 DAY ) days UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 1 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 2 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 3 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 4 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 5 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 6 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 7 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 8 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 9 DAY )) spo
+        LEFT JOIN payment_record pr ON (
+        DATE_FORMAT( pr.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' ))
+        GROUP BY
+        days
+        ORDER BY
+        days ASC
+    </select>
+</mapper>

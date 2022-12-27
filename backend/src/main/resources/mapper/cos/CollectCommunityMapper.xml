@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.CollectCommunityMapper">
+
+    <!-- 分页获取收藏信息 -->
+    <select id="selectCollectPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        cc.*,
+        ci.community_name AS communityName,
+        ui.user_name AS userName,
+        ui.avatar,
+        ci.province,
+        ci.city,
+        ci.area
+        FROM
+        collect_community cc
+        LEFT JOIN community_info ci ON ( cc.community_code = ci.`code` )
+        LEFT JOIN user_info ui ON ( ui.`code` = cc.user_code )
+        WHERE 1 = 1
+        ORDER BY cc.create_date DESC
+    </select>
+</mapper>

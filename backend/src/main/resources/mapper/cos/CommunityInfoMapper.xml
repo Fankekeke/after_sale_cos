@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.CommunityInfoMapper">
+
+    <sql id="baseResult">
+        ci.id,
+        ci.code,
+        ci.community_name AS communityName,
+        ci.property_type AS propertyType,
+        ci.tenure_category AS tenureCategory,
+        ci.completion_time AS completionTime,
+        ci.property_tenure AS propertyTenure,
+        ci.total_houses AS totalHouses,
+        ci.total_construction_area AS totalConstructionArea,
+        ci.volume_rate AS volumeRate,
+        ci.greening_rate AS greeningRate,
+        ci.building_type AS buildingType,
+        ci.business_district AS businessDistrict,
+        ci.unified_heating AS unifiedHeating,
+        ci.water_supply AS waterSupply,
+        ci.parking_space AS parkingSpace,
+        ci.property_costs AS propertyCosts,
+        ci.parking_fee AS parkingFee,
+        ci.parking_management_fee AS parkingManagementFee,
+        ci.property_company AS propertyCompany,
+        ci.address,
+        ci.developer,
+        ci.del_flag AS delFlag,
+        ci.create_date AS createDate,
+        ci.province,
+        ci.city,
+        ci.area,
+        ci.longitude,
+        ci.latitude,
+        ci.remark
+    </sql>
+
+    <sql id="rentResult">
+        ri.id,
+        ri.title,
+        ri.house_code,
+        ri.room_type,
+        ri.rent_price,
+        ri.rent_remark,
+        ri.rental_request,
+        ri.room_pictures,
+        ri.has_television,
+        ri.has_air_conditioner,
+        ri.has_wardrobe,
+        ri.has_bed,
+        ri.has_bathroom,
+        ri.has_door_lock,
+        ri.has_balcony,
+        ri.has_heating,
+        ri.has_refrigerator,
+        ri.has_washing_machine,
+        ri.has_water_heater,
+        ri.has_broadband,
+        ri.has_sofa,
+        ri.has_range_hood,
+        ri.has_gas_stoves,
+        ri.has_cook,
+        ri.flag,
+        ri.create_date
+    </sql>
+
+    <sql id="baseParam">
+        <if test="communityInfo.code != null and communityInfo.code != ''">
+            AND ci.code LIKE CONCAT('%',#{communityInfo.code},'%')
+        </if>
+        <if test="communityInfo.communityName != null and communityInfo.communityName != ''">
+            AND ci.community_name LIKE CONCAT('%',#{communityInfo.communityName},'%')
+        </if>
+        <if test="communityInfo.propertyType != null">
+            AND ci.property_type = #{communityInfo.propertyType}
+        </if>
+        <if test="communityInfo.tenureCategory != null">
+            AND ci.tenure_category = #{communityInfo.tenureCategory}
+        </if>
+        <if test="communityInfo.buildingType != null">
+            AND ci.building_type = #{communityInfo.buildingType}
+        </if>
+        <if test="communityInfo.unifiedHeating != null">
+            AND ci.unified_heating = #{communityInfo.unifiedHeating}
+        </if>
+        <if test="communityInfo.waterSupply != null">
+            AND ci.water_supply = #{communityInfo.waterSupply}
+        </if>
+        <if test="communityInfo.address != null and communityInfo.address != ''">
+            AND ci.address LIKE CONCAT('%',#{communityInfo.address},'%')
+        </if>
+        <if test="communityInfo.province != null and communityInfo.province != ''">
+            AND ci.province LIKE CONCAT('%',#{communityInfo.province},'%')
+        </if>
+        <if test="communityInfo.city != null and communityInfo.city != ''">
+            AND ci.city LIKE CONCAT('%',#{communityInfo.city},'%')
+        </if>
+        <if test="communityInfo.area != null and communityInfo.area != ''">
+            AND ci.area LIKE CONCAT('%',#{communityInfo.area},'%')
+        </if>
+    </sql>
+
+    <!-- 分页获取小区信息 -->
+    <select id="selectCommunityPage" resultType="java.util.LinkedHashMap">
+        SELECT <include refid="baseResult"/> FROM community_info ci
+        WHERE 1 = 1
+        <include refid="baseParam"/>
+        ORDER BY ci.create_date DESC
+    </select>
+
+    <!-- 远程获取小区信息 -->
+    <select id="remoteCommunity" resultType="java.util.LinkedHashMap">
+        SELECT
+        ci.code,
+        ci.community_name AS communityName,
+        ci.province,
+        ci.city,
+        ci.area
+        FROM community_info ci
+        WHERE 1 = 1
+        <if test="name != null and name != ''">
+        AND ci.community_name LIKE CONCAT('%',#{name},'%')
+        </if>
+        LIMIT 8
+    </select>
+
+    <!-- 根据小区编号获取租房信息 -->
+    <select id="selectHouseRentByCode" resultType="java.util.LinkedHashMap">
+        select
+        <include refid="rentResult"/>,
+        hi.address as houseAddress,
+        hi.house_type,
+        hi.decoration_type,
+        hi.property_overview,
+        hi.tags,
+        ci.community_name,
+        ci.province,
+        ci.code as communityCode
+        ci.city,
+        ci.area
+        from
+        rent_info ri
+        left join house_info hi on
+        hi.code = ri.house_code
+        left join community_info ci on
+        ci.code = hi.community_code
+        where
+        1 = 1
+        <if test="code != null and code != ''">
+            AND ci.code = #{code}
+        </if>
+    </select>
+</mapper>

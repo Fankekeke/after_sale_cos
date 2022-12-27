@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.MessageInfoMapper">
+
+    <sql id="baseResult">
+        mi.content,
+        mi.create_date,
+        mi.del_flag,
+        mi.id,
+        mi.send_user,
+        mi.title,
+        mi.to_user
+    </sql>
+
+    <sql id="baseParam">
+        <if test="messageInfo.sendUserName != null and messageInfo.sendUserName != ''">
+            AND ui1.user_name LIKE CONCAT('%',#{messageInfo.sendUserName},'%')
+        </if>
+        <if test="messageInfo.toUserName != null and messageInfo.toUserName != ''">
+            AND ui2.user_name LIKE CONCAT('%',#{messageInfo.toUserName},'%')
+        </if>
+        <if test="messageInfo.title != null and messageInfo.title != ''">
+            AND mi.title LIKE CONCAT('%',#{messageInfo.title},'%')
+        </if>
+        <if test="messageInfo.content != null and messageInfo.content != ''">
+            AND mi.content LIKE CONCAT('%',#{messageInfo.content},'%')
+        </if>
+    </sql>
+
+    <!-- 分页查询消息信息 -->
+    <select id="selectMessagePage" resultType="java.util.LinkedHashMap">
+        SELECT <include refid="baseResult"/>,
+        ui1.user_name AS sendUserName,
+        ui1.avatar AS sendUserAvatar,
+        ui2.user_name AS toUserName,
+        ui2.avatar AS toUserAvatar
+        FROM message_info mi
+        LEFT JOIN user_info ui1 ON ( ui1.code = mi.send_user )
+        LEFT JOIN user_info ui2 ON ( ui2.code = mi.to_user )
+        WHERE 1 = 1
+        <include refid="baseParam"/>
+        ORDER BY mi.create_date DESC
+    </select>
+
+    <!-- 根据用户编号获取消息信息 -->
+    <select id="selectMessageByUser" resultType="java.util.LinkedHashMap">
+        SELECT <include refid="baseResult"/>,
+        ui1.user_name AS sendUserName,
+        ui1.avatar AS sendUserAvatar
+        FROM message_info mi
+        LEFT JOIN user_info ui1 ON ( ui1.code = mi.send_user )
+        WHERE 1 = 1
+        <if test="userCode != null and userCode != ''">
+            AND mi.to_user = #{userCode}
+        </if>
+        <if test="userCode == null">
+            AND mi.to_user IS NULL
+        </if>
+        AND mi.del_flag = '0'
+        ORDER BY mi.create_date DESC
+    </select>
+
+    <!-- 根据用户编号获取消息信息 -->
+    <select id="selectMessageList" resultType="java.util.LinkedHashMap">
+        SELECT <include refid="baseResult"/>
+        FROM message_info mi
+        WHERE 1 = 1
+        <if test="userCode != null and userCode != ''">
+            AND mi.to_user = #{userCode}
+        </if>
+        <if test="userCode == null">
+            AND mi.to_user IS NULL
+        </if>
+        AND mi.del_flag = '0'
+        ORDER BY mi.create_date DESC
+    </select>
+</mapper>

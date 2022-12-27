@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.CollectRentMapper">
+
+    <!-- 分页获取收藏信息 -->
+    <select id="selectCollectPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        cr.*,
+        ci.community_name AS communityName,
+        hi.address AS houseAddress,
+        hi.city,
+        hi.area,
+        hi.province,
+        ui.user_name AS userName,
+        ui.avatar
+        FROM
+        collect_rent cr
+        LEFT JOIN rent_info ri ON ( ri.id = cr.rent_id )
+        LEFT JOIN house_info hi ON ( hi.CODE = ri.house_code )
+        LEFT JOIN community_info ci ON ( hi.community_code = ci.`code` )
+        LEFT JOIN user_info ui ON ( ui.`code` = cr.user_code )
+        WHERE 1 = 1
+        ORDER BY cr.create_date DESC
+    </select>
+</mapper>

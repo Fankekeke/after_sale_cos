@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.UserInfoMapper">
+
+    <!-- 分页查询用户信息 -->
+    <select id="getUserInfoByPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        ui.id,
+        ui.code,
+        ui.user_name AS userName,
+        ui.avatar,
+        ui.phone,
+        ui.email,
+        ui.sex,
+        ui.type,
+        ui.create_date AS createDate
+        FROM
+        user_info ui
+        WHERE 1 = 1
+        <if test="userInfo.userName != null and userInfo.userName != ''">
+            AND ui.user_name LIKE CONCAT('%',#{userInfo.userName},'%')
+        </if>
+        <if test="userInfo.sex != null">
+            AND ui.sex = #{userInfo.sex}
+        </if>
+        <if test="userInfo.type != null">
+            AND ui.type = #{userInfo.type}
+        </if>
+        ORDER BY ui.create_date
+    </select>
+
+    <!-- 远程调用用户信息 -->
+    <select id="remote" resultType="java.util.LinkedHashMap">
+        SELECT
+        ui.id,
+        ui.code,
+        ui.user_name AS userName,
+        ui.avatar,
+        ui.phone,
+        ui.email,
+        ui.sex,
+        ui.type,
+        ui.create_date AS createDate
+        FROM
+        user_info ui
+        WHERE 1 = 1
+        <if test="userName != null and userName != ''">
+            AND ui.user_name LIKE CONCAT('%',#{userName},'%')
+        </if>
+        ORDER BY ui.create_date
+        LIMIT 8
+    </select>
+</mapper>

@@ -1,0 +1,67 @@
+package cc.mrbird.febs.cos.service;
+
+import cc.mrbird.febs.cos.entity.DeliveryReview;
+import cc.mrbird.febs.cos.entity.vo.ContractVo;
+import cc.mrbird.febs.cos.entity.vo.DeliveryReviewVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+
+/**
+ * @author FanK
+ */
+public interface IDeliveryReviewService extends IService<DeliveryReview> {
+
+    /**
+     * 分页获取交付审核信息
+     *
+     * @param page           分页对象
+     * @param deliveryReview 参数
+     * @return 结果
+     */
+    IPage<LinkedHashMap<String, Object>> selectDeliveryPage(Page<DeliveryReview> page, DeliveryReview deliveryReview);
+
+    /**
+     * 房租合同预警
+     *
+     * @param userCode 用户编号
+     * @return 结果
+     */
+    List<DeliveryReviewVo> selectDeliveryOver(String userCode);
+
+    /**
+     * 添加交付审核信息
+     *
+     * @param deliveryReview 交付审核信息
+     * @return 结果
+     */
+    boolean saveDeliveryReview(DeliveryReview deliveryReview);
+
+    /**
+     * 导出合同信息
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    ContractVo exportContract(String contractCode);
+
+    /**
+     * 合同审核通过
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    boolean auditAdopt(String contractCode);
+
+    /**
+     * 合同审核驳回
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    boolean auditReject(String contractCode);
+}
