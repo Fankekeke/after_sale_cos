@@ -17,38 +17,28 @@ import java.util.List;
  * @author FanK
  */
 @RestController
-@RequestMapping("/cos/user-info")
+@RequestMapping("/manage/user-info")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserInfoController {
 
     private final IUserInfoService userInfoService;
 
     /**
-     * 分页获取用户信息
+     * 分页获取客户信息
      *
-     * @param page     分页对象
-     * @param userInfo 用户信息
+     * @param page 分页对象
+     * @param userInfo 客户信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<UserInfo> page, UserInfo userInfo) {
-        return R.ok(userInfoService.getUserInfoByPage(page, userInfo));
+        return R.ok();
     }
 
     /**
-     * 获取用户信息
+     * 新增客户信息
      *
-     * @return 结果
-     */
-    @GetMapping("/list")
-    public R list() {
-        return R.ok(userInfoService.list());
-    }
-
-    /**
-     * 新增用户信息
-     *
-     * @param userInfo 用户信息
+     * @param userInfo 客户信息
      * @return 结果
      */
     @PostMapping
@@ -58,20 +48,9 @@ public class UserInfoController {
     }
 
     /**
-     * 远程调用用户信息
+     * 修改客户信息
      *
-     * @param userName 用户名称
-     * @return 结果
-     */
-    @GetMapping("/remote/{userName}")
-    public R remote(@PathVariable(value = "userName", required = false) String userName) {
-        return R.ok(userInfoService.remote(userName));
-    }
-
-    /**
-     * 修改用户信息
-     *
-     * @param userInfo 用户信息
+     * @param userInfo 客户信息
      * @return 结果
      */
     @PutMapping
@@ -80,10 +59,10 @@ public class UserInfoController {
     }
 
     /**
-     * 删除用户信息
+     * 删除客户信息
      *
      * @param ids ids
-     * @return 用户信息
+     * @return 客户信息
      */
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {

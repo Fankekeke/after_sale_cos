@@ -8,45 +8,65 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author FanK
  */
 @RestController
-@RequestMapping("/cos/payment-record")
+@RequestMapping("/manage/payment-record")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PaymentRecordController {
 
     private final IPaymentRecordService paymentRecordService;
 
     /**
-     * 分页获取缴费记录
+     * 分页获取缴费记录信息
      *
-     * @param page          分页对象
-     * @param paymentRecord 参数
+     * @param page 分页对象
+     * @param paymentRecord 缴费记录信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<PaymentRecord> page, PaymentRecord paymentRecord) {
-        return R.ok(paymentRecordService.selectRecordPage(page, paymentRecord));
+        return R.ok();
     }
 
     /**
-     * 添加缴费信息
+     * 新增缴费记录信息
      *
-     * @param paymentRecord 缴费信息
+     * @param paymentRecord 缴费记录信息
      * @return 结果
      */
     @PostMapping
     public R save(PaymentRecord paymentRecord) {
-        return R.ok(paymentRecordService.savePaymentRecord(paymentRecord));
+        paymentRecord.setCreateDate(DateUtil.formatDateTime(new Date()));
+        return R.ok(paymentRecordService.save(paymentRecord));
+    }
+
+    /**
+     * 修改缴费记录信息
+     *
+     * @param paymentRecord 缴费记录信息
+     * @return 结果
+     */
+    @PutMapping
+    public R edit(PaymentRecord paymentRecord) {
+        return R.ok(paymentRecordService.updateById(paymentRecord));
+    }
+
+    /**
+     * 删除缴费记录信息
+     *
+     * @param ids ids
+     * @return 缴费记录信息
+     */
+    @DeleteMapping("/{ids}")
+    public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
+        return R.ok(paymentRecordService.removeByIds(ids));
     }
 
 }

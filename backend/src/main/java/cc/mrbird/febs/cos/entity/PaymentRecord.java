@@ -1,19 +1,16 @@
 package cc.mrbird.febs.cos.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 缴费记录
+ * 客户缴费记录
  *
  * @author FanK
  */
@@ -31,46 +28,24 @@ public class PaymentRecord implements Serializable {
     private Integer id;
 
     /**
-     * 合同编号
+     * 客户ID
      */
-    private String contractCode;
+    private Integer userId;
 
     /**
-     * 缴费人
+     * 缴纳费用
      */
-    private String rentUserCode;
+    private BigDecimal money;
 
     /**
-     * 缴费金额
+     * 工单编号
      */
-    private BigDecimal amount;
+    private String orderCode;
 
     /**
-     * 可供时间（月）
-     */
-    private Integer rentDay;
-
-    /**
-     * 开始时间
-     */
-    private String startDate;
-
-    /**
-     * 结束时间
-     */
-    private String endDate;
-
-    /**
-     * 缴费类型（1.房租 2.押金）
-     */
-    private String paymentType;
-
-    /**
-     * 缴费时间
+     * 缴纳时间
      */
     private String createDate;
 
-    @TableField(exist = false)
-    private String rentUser;
 
 }

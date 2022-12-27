@@ -3,19 +3,37 @@
 <mapper namespace="cc.mrbird.febs.cos.dao.StaffEvaluationMapper">
 
     <!-- 分页获取员工评价信息 -->
-    <select id="selectStaffEvaluationPage" resultType="java.util.LinkedHashMap">
+    <select id="selectEvaluatePage" resultType="java.util.LinkedHashMap">
         SELECT
-        se.*,
-        ui.user_name AS userName,
-        ui.avatar AS userAvatar,
-        si.staff_name AS staffName,
-        si.avatar
+        id,
+        user_id,
+        order_code,
+        staff_id,
+        schedule_score,
+        repair_score,
+        service_score,
+        score,
+        create_date,
+        si.NAME AS staffName,
+        ui.NAME AS userName,
+        oi.order_name
         FROM
         staff_evaluation se
-        LEFT JOIN staff_info si ON (si.staff_code = se.staff_code)
-        LEFT JOIN user_info ui ON ( ui.`code` = se.user_code )
+        LEFT JOIN staff_info si ON ( si.id = se.staff_id )
+        LEFT JOIN user_info ui ui ON ( ui.id = se.user_id )
+        LEFT JOIN order_info oi ON ( oi.order_code = se.order_code )
         WHERE
         1 = 1
-        ORDER BY se.create_date DESC
+        <if test="staffEvaluation.staffName != null and staffEvaluation.staffName != ''">
+            AND si.`name` LIKE CONCAT('%',#{staffEvaluation.staffName},'%')
+        </if>
+        <if test="staffEvaluation.userName != null and staffEvaluation.userName != ''">
+            AND ui.`name` LIKE CONCAT('%',#{staffEvaluation.userName},'%')
+        </if>
+        <if test="staffEvaluation.orderName != null and staffEvaluation.orderName != ''">
+            AND oi.`order_name` LIKE CONCAT('%',#{staffEvaluation.orderName},'%')
+        </if>
+        ORDER BY
+        se.create_date
     </select>
 </mapper>

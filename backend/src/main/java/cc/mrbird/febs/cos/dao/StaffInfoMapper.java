@@ -14,9 +14,9 @@ import java.util.LinkedHashMap;
 public interface StaffInfoMapper extends BaseMapper<StaffInfo> {
 
     /**
-     * 获取员工分页信息
+     * 分页获取员工信息
      *
-     * @param page      分页对象
+     * @param page 分页对象
      * @param staffInfo 员工信息
      * @return 结果
      */

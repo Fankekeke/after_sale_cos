@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.ServiceSortMapper">
+
+    <!-- 分页获取服务类型信息 -->
+    <select id="selectServiceSortPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        ss.id,
+        ss.`name`,
+        ss.code,
+        ss.create_date
+        FROM
+        service_sort ss
+        WHERE 1 = 1
+        <if test="serviceSort.name != null and serviceSort.name != ''">
+            AND ss.`name` LIKE CONCAT('%',#{serviceSort.name},'%')
+        </if>
+        <if test="serviceSort.code != null and serviceSort.code != ''">
+            AND ss.`code` LIKE CONCAT('%',#{serviceSort.code},'%')
+        </if>
+        ORDER BY ss.create_date DESC
+    </select>
+</mapper>

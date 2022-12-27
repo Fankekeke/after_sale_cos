@@ -1,6 +1,5 @@
 package cc.mrbird.febs.cos.entity;
 
-import java.time.LocalDateTime;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -10,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 用户信息
+ * 客户管理
  *
  * @author FanK
  */
@@ -19,54 +18,58 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserInfo implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * 主键ID
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    private static final long serialVersionUID = 1L;
-
     /**
-     * 用户编号
+     * 客户姓名
      */
-    private String code;
+    private String name;
 
     /**
-     * 用户昵称
-     */
-    private String userName;
-
-    /**
-     * 头像
-     */
-    private String avatar;
-
-    /**
-     * 电话号码
+     * 联系电话
      */
     private String phone;
 
     /**
-     * 邮箱地址
+     * 地址
      */
-    private String email;
+    private String address;
 
     /**
-     * 性别 1.男 2.女
+     * 省
      */
-    private Integer sex;
+    private String province;
 
     /**
-     * 用户类型 1.普通用户 2.业主
+     * 市
      */
-    private Integer type;
+    private String city;
+
+    /**
+     * 区
+     */
+    private String area;
+
+    /**
+     * 状态（1.正常 2.异常）
+     */
+    private Integer status;
 
     /**
      * 创建时间
      */
     private String createDate;
 
-    private Integer sysUserId;
+    /**
+     * 用户编号
+     */
+    private String code;
+
 
 }

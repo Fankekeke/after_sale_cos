@@ -2,36 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.StaffInfoMapper">
 
-    <sql id="baseResult">
-        si.id,
-        si.staff_name,
-        si.staff_code,
-        si.staff_type,
-        si.sex,
-        si.avatar,
-        si.staff_level,
-        si.phone,
-        si.create_date,
-        si.staff_status
-    </sql>
-
-    <sql id="baseParam">
-        <if test="staffInfo.staffName != null and staffInfo.staffName != ''">
-            AND si.staff_name LIKE CONCAT('%',#{staffInfo.staffName},'%')
-        </if>
-        <if test="staffInfo.staffCode != null and staffInfo.staffCode != ''">
-            AND si.staff_code LIKE CONCAT('%',#{staffInfo.staffCode},'%')
-        </if>
-        <if test="staffInfo.staffStatus != null">
-            AND si.staff_status = #{staffInfo.staffStatus}
-        </if>
-    </sql>
-
-    <!-- 获取员工分页信息 -->
+    <!-- 分页获取员工信息 -->
     <select id="selectStaffPage" resultType="java.util.LinkedHashMap">
-        SELECT <include refid="baseResult"/> FROM staff_info si
-        WHERE 1 = 1
-        <include refid="baseParam"/>
-        ORDER BY si.create_date DESC
+        SELECT
+        si.id,
+        si.name,
+        si.code,
+        si.phone,
+        si.sex,
+        si.status,
+        si.create_date,
+        si.responsible
+        FROM
+        staff_info si
+        WHERE
+        1 = 1
+        <if test="staffInfo.name != null and staffInfo.name != ''">
+            AND si.`name` LIKE CONCAT('%',#{staffInfo.name},'%')
+        </if>
+        <if test="staffInfo.code != null and staffInfo.code != ''">
+            AND si.`code` LIKE CONCAT('%',#{staffInfo.code},'%')
+        </if>
+        <if test="staffInfo.phone != null and staffInfo.phone != ''">
+            AND si.`phone` LIKE CONCAT('%',#{staffInfo.phone},'%')
+        </if>
+        <if test="staffInfo.status != null">
+            AND si.`status` = #{staffInfo.status}
+        </if>
+        ORDER BY
+        si.create_date DESC
     </select>
 </mapper>

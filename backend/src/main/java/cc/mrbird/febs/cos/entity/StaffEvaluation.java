@@ -1,14 +1,17 @@
 package cc.mrbird.febs.cos.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 员工服务评价
+ * 评价管理
  *
  * @author FanK
  */
@@ -20,14 +23,35 @@ public class StaffEvaluation implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 员工编号
+     * 主键ID
      */
-    private String staffCode;
+    @TableId(type = IdType.AUTO)
+    private Integer id;
 
     /**
-     * 出租ID
+     * 客户ID
      */
-    private Integer rentId;
+    private Integer userId;
+
+    /**
+     * 工单编号
+     */
+    private String orderCode;
+
+    /**
+     * 所属员工
+     */
+    private Integer staffId;
+
+    /**
+     * 准时得分
+     */
+    private BigDecimal scheduleScore;
+
+    /**
+     * 维修得分
+     */
+    private BigDecimal repairScore;
 
     /**
      * 服务得分
@@ -35,22 +59,21 @@ public class StaffEvaluation implements Serializable {
     private BigDecimal serviceScore;
 
     /**
-     * 评价人
+     * 综合得分
      */
-    private String userCode;
+    private BigDecimal score;
 
     /**
      * 评价时间
      */
     private String createDate;
 
-    public StaffEvaluation(String staffCode, Integer rentId, BigDecimal serviceScore, String userCode, String createDate) {
-        this.staffCode = staffCode;
-        this.rentId = rentId;
-        this.serviceScore = serviceScore;
-        this.userCode = userCode;
-        this.createDate = createDate;
-    }
+    @TableField(exist = false)
+    private String staffName;
 
-    public StaffEvaluation() {}
+    @TableField(exist = false)
+    private String userName;
+
+    @TableField(exist = false)
+    private String orderName;
 }

@@ -20,5 +20,5 @@ public interface StaffEvaluationMapper extends BaseMapper<StaffEvaluation> {
      * @param staffEvaluation 员工评价信息
      * @return 结果
      */
-    IPage<LinkedHashMap<String, Object>> selectStaffEvaluationPage(Page<StaffEvaluation> page, @Param("staffEvaluation") StaffEvaluation staffEvaluation);
+    IPage<LinkedHashMap<String, Object>> selectEvaluatePage(Page<StaffEvaluation> page, @Param("staffEvaluation") StaffEvaluation staffEvaluation);
 }

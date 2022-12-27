@@ -2,52 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.UserInfoMapper">
 
-    <!-- 分页查询用户信息 -->
-    <select id="getUserInfoByPage" resultType="java.util.LinkedHashMap">
+    <!-- 分页获取客户信息 -->
+    <select id="selectUserPage" resultType="java.util.LinkedHashMap">
         SELECT
         ui.id,
-        ui.code,
-        ui.user_name AS userName,
-        ui.avatar,
+        ui.`name`,
         ui.phone,
-        ui.email,
-        ui.sex,
-        ui.type,
-        ui.create_date AS createDate
+        ui.address,
+        ui.province,
+        ui.city,
+        ui.area,
+        ui.status,
+        ui.create_date,
+        ui.code
         FROM
         user_info ui
         WHERE 1 = 1
-        <if test="userInfo.userName != null and userInfo.userName != ''">
-            AND ui.user_name LIKE CONCAT('%',#{userInfo.userName},'%')
+        <if test="userInfo.name != null and userInfo.name != ''">
+            AND ui.`name` LIKE CONCAT('%',#{userInfo.name},'%')
         </if>
-        <if test="userInfo.sex != null">
-            AND ui.sex = #{userInfo.sex}
+        <if test="userInfo.phone != null and userInfo.phone != ''">
+            AND ui.phone LIKE CONCAT('%',#{userInfo.phone},'%')
         </if>
-        <if test="userInfo.type != null">
-            AND ui.type = #{userInfo.type}
+        <if test="userInfo.code != null and userInfo.code != ''">
+            AND ui.code LIKE CONCAT('%',#{userInfo.code},'%')
         </if>
-        ORDER BY ui.create_date
-    </select>
-
-    <!-- 远程调用用户信息 -->
-    <select id="remote" resultType="java.util.LinkedHashMap">
-        SELECT
-        ui.id,
-        ui.code,
-        ui.user_name AS userName,
-        ui.avatar,
-        ui.phone,
-        ui.email,
-        ui.sex,
-        ui.type,
-        ui.create_date AS createDate
-        FROM
-        user_info ui
-        WHERE 1 = 1
-        <if test="userName != null and userName != ''">
-            AND ui.user_name LIKE CONCAT('%',#{userName},'%')
+        <if test="userInfo.status != null">
+            AND ui.status = #{userInfo.status}
         </if>
-        ORDER BY ui.create_date
-        LIMIT 8
+        ORDER BY ui.create_date DESC
     </select>
 </mapper>
