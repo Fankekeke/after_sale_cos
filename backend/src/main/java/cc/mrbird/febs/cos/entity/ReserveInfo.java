@@ -3,6 +3,7 @@ package cc.mrbird.febs.cos.entity;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -61,5 +62,13 @@ public class ReserveInfo implements Serializable {
      */
     private Integer openFlag;
 
+    @TableField(exist = false)
+    private String userName;
+
+    @TableField(exist = false)
+    private String productName;
+
+    @TableField(exist = false)
+    private Integer productType;
 
 }

@@ -26,13 +26,13 @@ public class OrderInfoController {
     /**
      * 分页获取工单信息
      *
-     * @param page 分页对象
+     * @param page      分页对象
      * @param orderInfo 工单信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<OrderInfo> page, OrderInfo orderInfo) {
-        return R.ok();
+        return R.ok(orderInfoService.selectOrderPage(page, orderInfo));
     }
 
     /**
@@ -43,6 +43,7 @@ public class OrderInfoController {
      */
     @PostMapping
     public R save(OrderInfo orderInfo) {
+        orderInfo.setOrderCode("ORD-" + System.currentTimeMillis());
         orderInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(orderInfoService.save(orderInfo));
     }

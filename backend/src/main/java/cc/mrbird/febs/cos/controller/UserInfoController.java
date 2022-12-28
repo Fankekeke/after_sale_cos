@@ -26,13 +26,13 @@ public class UserInfoController {
     /**
      * 分页获取客户信息
      *
-     * @param page 分页对象
+     * @param page     分页对象
      * @param userInfo 客户信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<UserInfo> page, UserInfo userInfo) {
-        return R.ok();
+        return R.ok(userInfoService.selectUserPage(page, userInfo));
     }
 
     /**
@@ -43,6 +43,7 @@ public class UserInfoController {
      */
     @PostMapping
     public R save(UserInfo userInfo) {
+        userInfo.setCode("U-" + System.currentTimeMillis());
         userInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(userInfoService.save(userInfo));
     }

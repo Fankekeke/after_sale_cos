@@ -4,6 +4,38 @@
 
     <!-- 分页获取维修信息 -->
     <select id="selectRepairPage" resultType="java.util.LinkedHashMap">
-
+        SELECT
+        ri.id,
+        ri.repair_code,
+        ri.staff_id,
+        ri.repair_status,
+        ri.remark,
+        ri.create_date,
+        oi.order_name,
+        si.NAME AS staffName,
+        pi1.NAME AS productName,
+        pi1.`type` AS productType,
+        pi1.images
+        FROM
+        repair_info ri
+        LEFT JOIN staff_info si ON ( si.id = ri.staff_id )
+        LEFT JOIN order_info oi ON ( oi.repair_code = ri.repair_code )
+        LEFT JOIN product_info pi1 ( pi1.id = oi.product_id )
+        WHERE
+        1 = 1
+        <if test="repairInfo.repairCode != null and repairInfo.repairCode != ''">
+            AND ri.repair_code LIKE CONCAT('%',#{repairInfo.repairCode},'%')
+        </if>
+        <if test="repairInfo.repairStatus != null">
+            AND ri.repair_status = #{repairInfo.repairStatus}
+        </if>
+        <if test="repairInfo.orderName != null and repairInfo.orderName != ''">
+            AND oi.order_name LIKE CONCAT('%',#{repairInfo.orderName},'%')
+        </if>
+        <if test="repairInfo.staffName != null and repairInfo.staffName != ''">
+            AND si.order_name LIKE CONCAT('%',#{repairInfo.staffName},'%')
+        </if>
+        ORDER BY
+        ri.create_date DESC
     </select>
 </mapper>

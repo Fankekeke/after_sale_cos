@@ -26,13 +26,13 @@ public class StaffInfoController {
     /**
      * 分页获取员工信息
      *
-     * @param page 分页对象
+     * @param page      分页对象
      * @param staffInfo 员工信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<StaffInfo> page, StaffInfo staffInfo) {
-        return R.ok();
+        return R.ok(staffInfoService.selectStaffPage(page, staffInfo));
     }
 
     /**
@@ -43,6 +43,7 @@ public class StaffInfoController {
      */
     @PostMapping
     public R save(StaffInfo staffInfo) {
+        staffInfo.setCode("ST-" + System.currentTimeMillis());
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(staffInfoService.save(staffInfo));
     }

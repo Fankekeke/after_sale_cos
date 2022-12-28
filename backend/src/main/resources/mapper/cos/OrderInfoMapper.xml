@@ -4,6 +4,40 @@
 
     <!-- 分页获取工单信息 -->
     <select id="selectOrderPage" resultType="java.util.LinkedHashMap">
-
+        SELECT
+        oi.id,
+        oi.order_name,
+        oi.repair_code,
+        oi.order_code,
+        oi.server_type,
+        oi.money,
+        oi.remark,
+        oi.images,
+        oi.status,
+        oi.customer_id,
+        oi.product_id,
+        oi.staff_id,
+        oi.create_date,
+        ui.name as userName,
+        ui.phone
+        FROM
+        order_info oi
+        LEFT JOIN user_info ui ON ( ui.id = oi.customer_id )
+        WHERE
+        1 = 1
+        <if test="orderInfo.orderCode != null and orderInfo.orderCode != ''">
+            AND oi.order_code LIKE CONCAT('%',#{orderInfo.orderCode},'%')
+        </if>
+        <if test="orderInfo.orderName != null and orderInfo.orderName != ''">
+            AND oi.order_name LIKE CONCAT('%',#{orderInfo.orderName},'%')
+        </if>
+        <if test="orderInfo.status != null">
+            AND oi.status = #{orderInfo.status}
+        </if>
+        <if test="orderInfo.userName != null and orderInfo.userName != ''">
+            AND ui.name LIKE CONCAT('%',#{orderInfo.userName},'%')
+        </if>
+        ORDER BY
+        oi.create_date DESC
     </select>
 </mapper>

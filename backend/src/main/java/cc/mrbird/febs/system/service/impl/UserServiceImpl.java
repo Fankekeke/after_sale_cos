@@ -167,9 +167,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void regist(String username, String password, String staffCode) throws Exception {
-        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStaffCode, staffCode));
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getCode, staffCode));
         if (staffInfo == null) {
             throw new FebsException("员工编号不存在");
         }
@@ -184,7 +184,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setDescription("注册用户");
         this.save(user);
 
-        staffInfoService.update(Wrappers.<StaffInfo>lambdaUpdate().set(StaffInfo::getSysUserId, user.getUserId()).eq(StaffInfo::getStaffCode, staffCode));
 
         UserRole ur = new UserRole();
         ur.setUserId(user.getUserId());

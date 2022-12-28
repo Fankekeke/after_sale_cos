@@ -4,6 +4,39 @@
 
     <!-- 分页获取预约信息 -->
     <select id="selectReservePage" resultType="java.util.LinkedHashMap">
-
+        SELECT
+        ri.id,
+        ri.user_id,
+        ri.remark,
+        ri.images,
+        ri.product_id,
+        ri.reserve_date,
+        ri.create_date,
+        ri.open_flag,
+        ui.NAME AS userName,
+        ui.phone,
+        pi1.NAME AS productName,
+        pi1.`type` AS productType,
+        pi1.images
+        FROM
+        reserve_info ri
+        LEFT JOIN user_info ui ON ( ui.id = ri.user_id )
+        LEFT JOIN product_info pi1 ON ( pi1.id = ri.product_id )
+        WHERE
+        1 = 1
+        <if test="reserveInfo.userName != null and reserveInfo.userName != ''">
+            AND ui.`name` LIKE CONCAT('%',#{reserveInfo.userName},'%')
+        </if>
+        <if test="reserveInfo.productName != null and reserveInfo.productName != ''">
+            AND pi1.`name` LIKE CONCAT('%',#{reserveInfo.productName},'%')
+        </if>
+        <if test="reserveInfo.productType != null">
+            AND pi1.`type` = #{reserveInfo.productType}
+        </if>
+        <if test="reserveInfo.openFlag != null">
+            AND ri.open_flag = #{reserveInfo.openFlag}
+        </if>
+        ORDER BY
+        ri.create_date DESC
     </select>
 </mapper>

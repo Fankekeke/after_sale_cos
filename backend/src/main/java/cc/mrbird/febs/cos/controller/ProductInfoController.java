@@ -26,13 +26,13 @@ public class ProductInfoController {
     /**
      * 分页获取产品信息
      *
-     * @param page 分页对象
+     * @param page        分页对象
      * @param productInfo 产品信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<ProductInfo> page, ProductInfo productInfo) {
-        return R.ok();
+        return R.ok(productInfoService.selectProductPage(page, productInfo));
     }
 
     /**
@@ -43,6 +43,7 @@ public class ProductInfoController {
      */
     @PostMapping
     public R save(ProductInfo productInfo) {
+        productInfo.setCode("P-" + System.currentTimeMillis());
         productInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(productInfoService.save(productInfo));
     }

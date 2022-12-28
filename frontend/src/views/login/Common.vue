@@ -3,8 +3,7 @@
     <div class="content">
       <div class="top">
         <div class="header">
-          <img alt="logo" class="logo" src="static/img/logo.png" />
-          <span class="title">{{systemName}}</span>
+          <span class="title">售后服务管理系统</span>
         </div>
         <div class="desc"></div>
       </div>
@@ -49,8 +48,7 @@ export default {
     flex-direction: column;
     height: 100vh;
     overflow: auto;
-    background: #f0f2f5 url('https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg') no-repeat center 110px;
-    background-size: 100%;
+    background: white url(../../../static/img/house.jpg) no-repeat center ;
     .content {
       padding: 32px 0;
       flex: 1;

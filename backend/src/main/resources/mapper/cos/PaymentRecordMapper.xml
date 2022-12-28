@@ -4,6 +4,35 @@
 
     <!-- 分页获取缴费记录信息 -->
     <select id="selectPaymentRecordPage" resultType="java.util.LinkedHashMap">
-
+        SELECT
+        pr.id,
+        pr.user_id,
+        pr.money,
+        pr.order_code,
+        pr.create_date,
+        ui.NAME AS userName,
+        ui.phone,
+        oi.order_name,
+        oi.server_type
+        FROM
+        payment_record pr
+        LEFT JOIN user_info ui ON ( ui.id = pr.user_id )
+        LEFT JOIN order_info oi ON ( oi.order_code = pr.order_code )
+        WHERE
+        1 = 1
+        <if test="paymentRecord.orderCode != null and paymentRecord.orderCode != ''">
+            AND pr.order_code LIKE CONCAT('%',#{paymentRecord.orderCode},'%')
+        </if>
+        <if test="paymentRecord.userName != null and paymentRecord.userName != ''">
+            AND ui.NAME LIKE CONCAT('%',#{paymentRecord.userName},'%')
+        </if>
+        <if test="paymentRecord.orderName != null and paymentRecord.orderName != ''">
+            AND pr.order_name LIKE CONCAT('%',#{paymentRecord.orderName},'%')
+        </if>
+        <if test="paymentRecord.serverType != null">
+            AND oi.server_type LIKE CONCAT('%',#{paymentRecord.serverType},'%')
+        </if>
+        ORDER BY
+        pr.create_date DESC
     </select>
 </mapper>

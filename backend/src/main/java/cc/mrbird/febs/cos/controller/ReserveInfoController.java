@@ -32,7 +32,7 @@ public class ReserveInfoController {
      */
     @GetMapping("/page")
     public R page(Page<ReserveInfo> page, ReserveInfo reserveInfo) {
-        return R.ok();
+        return R.ok(reserveInfoService.selectReservePage(page, reserveInfo));
     }
 
     /**

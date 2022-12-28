@@ -32,7 +32,7 @@ public class ServiceSortController {
      */
     @GetMapping("/page")
     public R page(Page<ServiceSort> page, ServiceSort serviceSort) {
-        return R.ok();
+        return R.ok(serviceSortService.selectServiceSortPage(page, serviceSort));
     }
 
     /**

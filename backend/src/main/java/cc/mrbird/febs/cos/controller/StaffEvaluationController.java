@@ -32,7 +32,7 @@ public class StaffEvaluationController {
      */
     @GetMapping("/page")
     public R page(Page<StaffEvaluation> page, StaffEvaluation staffEvaluation) {
-        return R.ok();
+        return R.ok(staffEvaluationService.selectEvaluatePage(page, staffEvaluation));
     }
 
     /**
