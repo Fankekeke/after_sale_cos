@@ -15,9 +15,17 @@ public interface IRepairInfoService extends IService<RepairInfo> {
     /**
      * 分页获取维修信息
      *
-     * @param page 分页对象
+     * @param page       分页对象
      * @param repairInfo 维修信息
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectRepairPage(Page<RepairInfo> page, RepairInfo repairInfo);
+
+    /**
+     * 创建维修单
+     *
+     * @param staffId 员工ID
+     * @return 结果
+     */
+    boolean saveRepair(Integer staffId);
 }

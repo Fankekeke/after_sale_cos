@@ -36,6 +36,16 @@ public class ProductInfoController {
     }
 
     /**
+     * 查询所有产品信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/list")
+    public R list() {
+        return R.ok(productInfoService.list());
+    }
+
+    /**
      * 新增产品信息
      *
      * @param productInfo 产品信息

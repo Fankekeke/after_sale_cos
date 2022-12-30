@@ -56,10 +56,12 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
         List<RepairInfo> repairList = repairInfoMapper.selectRepairByDate();
         Map<Integer, List<RepairInfo>> repairStaffMap = repairList.stream().collect(Collectors.groupingBy(RepairInfo::getStaffId));
         staffInfoList.forEach(e -> {
-            boolean ex = repairStaffMap != null && repairStaffMap.get(e.getId()) != null;
+            boolean ex = repairStaffMap == null;
             LinkedHashMap<String, Object> item = new LinkedHashMap<String, Object>() {
                 {
-                    put(e.getName(), ex);
+                    put("id", e.getId());
+                    put("name", e.getName());
+                    put("status", !ex && CollectionUtil.isNotEmpty(repairStaffMap.get(e.getId())));
                 }
             };
             result.add(item);

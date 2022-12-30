@@ -4,14 +4,20 @@ import cc.mrbird.febs.cos.dao.PaymentRecordMapper;
 import cc.mrbird.febs.cos.entity.BulletinInfo;
 import cc.mrbird.febs.cos.entity.OrderInfo;
 import cc.mrbird.febs.cos.dao.OrderInfoMapper;
+import cc.mrbird.febs.cos.entity.RepairInfo;
+import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.*;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -80,11 +86,85 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         }
         // 客户信息展示
         if (roleId == 75) {
+            // 进行中工单
 
         }
         // 公告信息
         List<BulletinInfo> bulletinList = bulletinInfoService.list();
         result.put("bulletin", bulletinList);
         return result;
+    }
+
+    /**
+     * 工单绑定维修人员
+     *
+     * @param orderCode 工单编号
+     * @param staffId   员工ID
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean setOrderRepairUser(String orderCode, Integer staffId) {
+        // 获取工单信息
+        OrderInfo orderInfo = this.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getOrderCode, orderCode));
+        orderInfo.setStaffId(staffId);
+        // 获取维修单，如果没有则新建
+        if (StrUtil.isEmpty(orderInfo.getRepairCode())) {
+            RepairInfo repairInfo = new RepairInfo();
+            repairInfo.setRepairCode("RE-" + System.currentTimeMillis());
+            repairInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+            repairInfo.setRepairStatus(1);
+            repairInfo.setStaffId(staffId);
+            repairInfoService.save(repairInfo);
+
+            // 修改工单维修编号和维修人员
+            orderInfo.setRepairCode(repairInfo.getRepairCode());
+        } else {
+            // 查询维修单信息
+            RepairInfo repairInfo = repairInfoService.getOne(Wrappers.<RepairInfo>lambdaQuery().eq(RepairInfo::getRepairCode, orderInfo.getRepairCode()));
+            // 修改维修人员信息
+            repairInfo.setStaffId(staffId);
+            repairInfoService.updateById(repairInfo);
+        }
+        return this.updateById(orderInfo);
+    }
+
+    /**
+     * 自动派单
+     *
+     * @param orderCode 工单编号
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void automaticDispatch(String orderCode) {
+        // 校验工单编号
+        if (StrUtil.isEmpty(orderCode)) {
+            return;
+        }
+        // 获取工单信息
+        OrderInfo orderInfo = this.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getOrderCode, orderCode));
+        // 判断服务类型
+        if (orderInfo.getServerType() != 1) {
+            return;
+        }
+        // 查询当前当前工作状态空闲员工
+        List<LinkedHashMap<String, Object>> staffWorkStatus = staffInfoService.selectStaffWorkStatus(DateUtil.formatDate(new Date()));
+        if (CollectionUtil.isEmpty(staffWorkStatus)) {
+            return;
+        }
+        for (LinkedHashMap<String, Object> workStatus : staffWorkStatus) {
+            if (!(Boolean) workStatus.get("status")) {
+                RepairInfo repairInfo = new RepairInfo();
+                repairInfo.setRepairCode("RE-" + System.currentTimeMillis());
+                repairInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+                repairInfo.setRepairStatus(1);
+                repairInfo.setStaffId(Integer.getInteger(workStatus.get("id").toString()));
+                repairInfoService.save(repairInfo);
+
+                // 修改工单维修编号和维修人员
+                orderInfo.setRepairCode(repairInfo.getRepairCode());
+                return;
+            }
+        }
     }
 }

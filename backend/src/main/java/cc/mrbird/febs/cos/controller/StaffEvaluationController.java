@@ -26,13 +26,24 @@ public class StaffEvaluationController {
     /**
      * 分页获取员工评价信息
      *
-     * @param page 分页对象
+     * @param page            分页对象
      * @param staffEvaluation 员工评价信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<StaffEvaluation> page, StaffEvaluation staffEvaluation) {
         return R.ok(staffEvaluationService.selectEvaluatePage(page, staffEvaluation));
+    }
+
+    /**
+     * 根据员工查询综合评价信息
+     *
+     * @param staffId 员工ID
+     * @return 结果
+     */
+    @GetMapping("/score/staff/{staffId}")
+    public R selectEvaluateByStaff(@PathVariable("staffId") Integer staffId) {
+        return R.ok(staffEvaluationService.selectEvaluateByStaff(staffId));
     }
 
     /**

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 /**
@@ -20,4 +21,12 @@ public interface IStaffEvaluationService extends IService<StaffEvaluation> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectEvaluatePage(Page<StaffEvaluation> page, StaffEvaluation staffEvaluation);
+
+    /**
+     * 根据员工查询综合评价信息
+     *
+     * @param staffId 员工ID
+     * @return 结果
+     */
+    LinkedHashMap<String, BigDecimal> selectEvaluateByStaff(Integer staffId);
 }

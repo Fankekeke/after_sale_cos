@@ -61,5 +61,10 @@ public class StaffInfo implements Serializable {
      */
     private String responsible;
 
+    /**
+     * 所属账户ID
+     */
+    private Long userId;
+
 
 }

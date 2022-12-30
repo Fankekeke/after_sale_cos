@@ -44,6 +44,18 @@ public class OrderInfoController {
      */
     @GetMapping("/home/data")
     public R homeData(@RequestParam("roleId") Long roleId, @RequestParam("userId") String userId) {
+        return R.ok(orderInfoService.homeData(roleId, userId));
+    }
+
+    /**
+     * 工单绑定维修人员
+     *
+     * @param orderCode 工单编号
+     * @param staffId   员工ID
+     * @return 结果
+     */
+    @GetMapping("/bind/repair")
+    public R setOrderRepairUser(@RequestParam("orderCode") String orderCode, @RequestParam("staffId") Integer staffId) {
         return R.ok();
     }
 

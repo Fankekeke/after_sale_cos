@@ -71,5 +71,8 @@ public class UserInfo implements Serializable {
      */
     private String code;
 
-
+    /**
+     * 所属账户ID
+     */
+    private Long userId;
 }

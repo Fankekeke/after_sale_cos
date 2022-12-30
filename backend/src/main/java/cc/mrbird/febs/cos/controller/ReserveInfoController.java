@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.ReserveInfo;
 import cc.mrbird.febs.cos.service.IReserveInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,25 @@ public class ReserveInfoController {
     /**
      * 分页获取预约信息
      *
-     * @param page 分页对象
+     * @param page        分页对象
      * @param reserveInfo 预约信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<ReserveInfo> page, ReserveInfo reserveInfo) {
         return R.ok(reserveInfoService.selectReservePage(page, reserveInfo));
+    }
+
+    /**
+     * 修改预约信息状态
+     *
+     * @param reserveId 预约ID
+     * @param status    状态
+     * @return 结果
+     */
+    @GetMapping("/edit/status")
+    public R editReserveStatus(@RequestParam("reserveId") Integer reserveId, @RequestParam("status") Integer status) {
+        return R.ok(reserveInfoService.update(Wrappers.<ReserveInfo>lambdaUpdate().set(ReserveInfo::getOpenFlag, status).eq(ReserveInfo::getId, reserveId)));
     }
 
     /**

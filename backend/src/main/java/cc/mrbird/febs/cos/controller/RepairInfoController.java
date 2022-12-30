@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.RepairInfo;
 import cc.mrbird.febs.cos.service.IRepairInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,25 @@ public class RepairInfoController {
     /**
      * 分页获取维修信息
      *
-     * @param page 分页对象
+     * @param page       分页对象
      * @param repairInfo 维修信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<RepairInfo> page, RepairInfo repairInfo) {
         return R.ok(repairInfoService.selectRepairPage(page, repairInfo));
+    }
+
+    /**
+     * 修改维修单状态
+     *
+     * @param repairId 维修信息ID
+     * @param status   状态
+     * @return 结果
+     */
+    @GetMapping("/edit/status")
+    public R editRepairStatus(@RequestParam("repairId") Integer repairId, @RequestParam("status") Integer status) {
+        return R.ok(repairInfoService.update(Wrappers.<RepairInfo>lambdaUpdate().set(RepairInfo::getRepairStatus, status).eq(RepairInfo::getId, repairId)));
     }
 
     /**

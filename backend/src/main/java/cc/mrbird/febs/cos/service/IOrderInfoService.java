@@ -15,7 +15,7 @@ public interface IOrderInfoService extends IService<OrderInfo> {
     /**
      * 分页获取工单信息
      *
-     * @param page 分页对象
+     * @param page      分页对象
      * @param orderInfo 工单信息
      * @return 结果
      */
@@ -29,4 +29,20 @@ public interface IOrderInfoService extends IService<OrderInfo> {
      * @return 结果
      */
     LinkedHashMap<String, Object> homeData(Long roleId, String userId);
+
+    /**
+     * 工单绑定维修人员
+     *
+     * @param orderCode 工单编号
+     * @param staffId   员工ID
+     * @return 结果
+     */
+    boolean setOrderRepairUser(String orderCode, Integer staffId);
+
+    /**
+     * 自动派单
+     *
+     * @param orderCode 工单编号
+     */
+    void automaticDispatch(String orderCode);
 }
