@@ -20,4 +20,13 @@ public interface IOrderInfoService extends IService<OrderInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectOrderPage(Page<OrderInfo> page, OrderInfo orderInfo);
+
+    /**
+     * 查询主页信息
+     *
+     * @param roleId 角色ID
+     * @param userId 用户ID
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> homeData(Long roleId, String userId);
 }

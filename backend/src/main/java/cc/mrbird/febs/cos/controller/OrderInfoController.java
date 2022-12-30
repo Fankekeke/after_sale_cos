@@ -36,6 +36,18 @@ public class OrderInfoController {
     }
 
     /**
+     * 查询主页信息
+     *
+     * @param roleId 角色ID
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/home/data")
+    public R homeData(@RequestParam("roleId") Long roleId, @RequestParam("userId") String userId) {
+        return R.ok();
+    }
+
+    /**
      * 新增工单信息
      *
      * @param orderInfo 工单信息

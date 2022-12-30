@@ -38,4 +38,19 @@
         ORDER BY
         ri.create_date DESC
     </select>
+
+    <!-- 根据时间获取维修单信息 -->
+    <select id="selectRepairByDate">
+        SELECT
+        ri.id,
+        ri.repair_code,
+        ri.staff_id,
+        ri.repair_status,
+        ri.remark,
+        ri.create_date
+        FROM
+        repair_info ri
+        WHERE 1 = 1
+        ri.repair_status IN (1, 2)
+    </select>
 </mapper>
