@@ -19,10 +19,12 @@
         oi.staff_id,
         oi.create_date,
         ui.name as userName,
-        ui.phone
+        ui.phone,
+        ss.name AS serverTypeName
         FROM
         order_info oi
         LEFT JOIN user_info ui ON ( ui.id = oi.customer_id )
+        LEFT JOIN service_sort ss ON (ss.id = oi.server_type)
         WHERE
         1 = 1
         <if test="orderInfo.orderCode != null and orderInfo.orderCode != ''">

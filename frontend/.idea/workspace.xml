@@ -20,12 +20,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51975f-5e37-45a1-bd9d-0f3c12f944d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/BulletinInfoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/dao/BulletinInfoMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/BulletinInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/IBulletinInfoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/service/impl/BulletinInfoServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/BulletinInfoMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/FileController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/manage/order/Order.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/manage/payment/Payment.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/manage/product/Product.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/manage/product/ProductAdd.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/manage/product/ProductEdit.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/manage/repair/Repair.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/manage/reserve/Reserve.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/manage/service/Service.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/manage/service/ServiceAdd.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/manage/service/ServiceEdit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/common/config/MyWebMvcConfigurerAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/common/config/MyWebMvcConfigurerAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/CustomerInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/CustomerInfoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/OrderInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/OrderInfoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/PaymentRecordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/PaymentRecordController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/ProductInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/ProductInfoController.java" afterDir="false" />
@@ -36,19 +43,15 @@
       <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/StaffInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/StaffInfoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/UserInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/controller/UserInfoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/OrderInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/OrderInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/PaymentRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/PaymentRecord.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/RepairInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/RepairInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/ReserveInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/cc/mrbird/febs/cos/entity/ReserveInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/OrderInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/OrderInfoMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/PaymentRecordMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/PaymentRecordMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/ProductInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/ProductInfoMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/RepairInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/RepairInfoMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/ReserveInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/mapper/cos/ReserveInfoMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/modules/setting.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/setting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/login/Common.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/Common.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/login/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/Login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/login/Regist.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/Regist.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/bulletin/Bulletin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/bulletin/Bulletin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/bulletin/BulletinAdd.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/bulletin/BulletinAdd.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/manage/bulletin/BulletinEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/manage/bulletin/BulletinEdit.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,12 +73,21 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/views/manage/service" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Project\售后管理系统\after_sale_cos\frontend\src\views\manage\service" />
+      <recent name="E:\Project\售后管理系统\after_sale_cos\frontend\src\views\manage\reserve" />
+      <recent name="E:\Project\售后管理系统\after_sale_cos\frontend\src\views\manage\repair" />
+      <recent name="E:\Project\售后管理系统\after_sale_cos\frontend\src\views\manage\order" />
+      <recent name="E:\Project\售后管理系统\after_sale_cos\frontend\src\views\manage\payment" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -86,6 +98,10 @@
       <option name="presentableId" value="Default" />
       <updated>1672236611035</updated>
       <workItem from="1672236612079" duration="1639000" />
+      <workItem from="1672317179696" duration="2158000" />
+      <workItem from="1672399074261" duration="990000" />
+      <workItem from="1672449627600" duration="3653000" />
+      <workItem from="1672476747550" duration="11151000" />
     </task>
     <servers />
   </component>
@@ -102,11 +118,12 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="661" y="257" width="598" height="536" key="find.popup" timestamp="1672238259483">
+    <state x="661" y="257" width="598" height="594" key="find.popup" timestamp="1672483916966">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="661" y="257" width="598" height="536" key="find.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1672238259483" />
+    <state x="661" y="257" width="598" height="594" key="find.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1672483916966" />
   </component>
 </project>

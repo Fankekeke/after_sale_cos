@@ -20,7 +20,7 @@
         repair_info ri
         LEFT JOIN staff_info si ON ( si.id = ri.staff_id )
         LEFT JOIN order_info oi ON ( oi.repair_code = ri.repair_code )
-        LEFT JOIN product_info pi1 ( pi1.id = oi.product_id )
+        LEFT JOIN product_info pi1 ON ( pi1.id = oi.product_id )
         WHERE
         1 = 1
         <if test="repairInfo.repairCode != null and repairInfo.repairCode != ''">

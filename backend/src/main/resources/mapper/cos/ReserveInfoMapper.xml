@@ -17,7 +17,7 @@
         ui.phone,
         pi1.NAME AS productName,
         pi1.`type` AS productType,
-        pi1.images
+        pi1.images AS productImages
         FROM
         reserve_info ri
         LEFT JOIN user_info ui ON ( ui.id = ri.user_id )

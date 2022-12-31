@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="修改公告" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="修改服务" @cancel="onClose" :width="400">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -10,72 +10,12 @@
     </template>
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
-        <a-col :span="12">
-          <a-form-item label='公告标题' v-bind="formItemLayout">
+        <a-col :span="24">
+          <a-form-item label='服务名称' v-bind="formItemLayout">
             <a-input v-decorator="[
-            'title',
+            'name',
             { rules: [{ required: true, message: '请输入名称!' }] }
             ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='上传人' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'publisher',
-            { rules: [{ required: true, message: '请输入上传人!' }] }
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='公告类型' v-bind="formItemLayout">
-            <a-select v-decorator="[
-              'type',
-              { rules: [{ required: true, message: '请输入公告类型!' }] }
-              ]">
-              <a-select-option value="1">通知</a-select-option>
-              <a-select-option value="2">公告</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='公告状态' v-bind="formItemLayout">
-            <a-select v-decorator="[
-              'rackUp',
-              { rules: [{ required: true, message: '请输入公告状态!' }] }
-              ]">
-              <a-select-option value="0">下架</a-select-option>
-              <a-select-option value="1">已发布</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="24">
-          <a-form-item label='公告内容' v-bind="formItemLayout">
-            <a-textarea :rows="6" v-decorator="[
-            'content',
-             { rules: [{ required: true, message: '请输入名称!' }] }
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="24">
-          <a-form-item label='图册' v-bind="formItemLayout">
-            <a-upload
-              name="avatar"
-              action="http://127.0.0.1:9527/file/fileUpload/"
-              list-type="picture-card"
-              :file-list="fileList"
-              @preview="handlePreview"
-              @change="picHandleChange"
-            >
-              <div v-if="fileList.length < 8">
-                <a-icon type="plus" />
-                <div class="ant-upload-text">
-                  Upload
-                </div>
-              </div>
-            </a-upload>
-            <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-              <img alt="example" style="width: 100%" :src="previewImage" />
-            </a-modal>
           </a-form-item>
         </a-col>
       </a-row>
@@ -98,9 +38,9 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: 'BulletinEdit',
+  name: 'serviceEdit',
   props: {
-    bulletinEditVisiable: {
+    serviceEditVisiable: {
       default: false
     }
   },
@@ -110,7 +50,7 @@ export default {
     }),
     show: {
       get: function () {
-        return this.bulletinEditVisiable
+        return this.serviceEditVisiable
       },
       set: function () {
       }
@@ -150,21 +90,21 @@ export default {
         this.fileList = imageList
       }
     },
-    setFormValues ({...bulletin}) {
-      this.rowId = bulletin.id
-      let fields = ['title', 'content', 'publisher', 'rackUp', 'type']
+    setFormValues ({...service}) {
+      this.rowId = service.id
+      let fields = ['name']
       let obj = {}
-      Object.keys(bulletin).forEach((key) => {
+      Object.keys(service).forEach((key) => {
         if (key === 'images') {
           this.fileList = []
-          this.imagesInit(bulletin['images'])
+          this.imagesInit(service['images'])
         }
         if (key === 'rackUp' || key === 'type') {
-          bulletin[key] = bulletin[key].toString()
+          service[key] = service[key].toString()
         }
         if (fields.indexOf(key) !== -1) {
           this.form.getFieldDecorator(key)
-          obj[key] = bulletin[key]
+          obj[key] = service[key]
         }
       })
       this.form.setFieldsValue(obj)
@@ -192,7 +132,7 @@ export default {
         values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
           this.loading = true
-          this.$put('/cos/bulletin-info', {
+          this.$put('/cos/service-sort', {
             ...values
           }).then((r) => {
             this.reset()

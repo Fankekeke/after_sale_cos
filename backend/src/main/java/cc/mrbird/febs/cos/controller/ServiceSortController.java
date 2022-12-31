@@ -17,7 +17,7 @@ import java.util.List;
  * @author FanK
  */
 @RestController
-@RequestMapping("/manage/service-sort")
+@RequestMapping("/cos/service-sort")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ServiceSortController {
 

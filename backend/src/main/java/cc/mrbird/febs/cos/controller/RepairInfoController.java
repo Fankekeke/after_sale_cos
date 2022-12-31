@@ -18,7 +18,7 @@ import java.util.List;
  * @author FanK
  */
 @RestController
-@RequestMapping("/manage/repair-info")
+@RequestMapping("/cos/repair-info")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RepairInfoController {
 

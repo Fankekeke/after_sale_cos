@@ -18,7 +18,7 @@ import java.util.List;
  * @author FanK
  */
 @RestController
-@RequestMapping("/manage/reserve-info")
+@RequestMapping("/cos/reserve-info")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ReserveInfoController {
 

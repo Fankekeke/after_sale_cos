@@ -7,18 +7,18 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="标题"
+                label="服务名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.title"/>
+                <a-input v-model="queryParams.name"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="内容"
+                label="服务编号"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.content"/>
+                <a-input v-model="queryParams.code"/>
               </a-form-item>
             </a-col>
           </div>
@@ -46,8 +46,6 @@
                @change="handleTableChange">
         <template slot="titleShow" slot-scope="text, record">
           <template>
-            <a-badge status="processing" v-if="record.rackUp === 1"/>
-            <a-badge status="error" v-if="record.rackUp === 0"/>
             <a-tooltip>
               <template slot="title">
                 {{ record.title }}
@@ -56,54 +54,44 @@
             </a-tooltip>
           </template>
         </template>
-        <template slot="contentShow" slot-scope="text, record">
-          <template>
-            <a-tooltip>
-              <template slot="title">
-                {{ record.content }}
-              </template>
-              {{ record.content.slice(0, 30) }} ...
-            </a-tooltip>
-          </template>
-        </template>
         <template slot="operation" slot-scope="text, record">
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
         </template>
       </a-table>
     </div>
-    <bulletin-add
-      v-if="bulletinAdd.visiable"
-      @close="handleBulletinAddClose"
-      @success="handleBulletinAddSuccess"
-      :bulletinAddVisiable="bulletinAdd.visiable">
-    </bulletin-add>
-    <bulletin-edit
-      ref="bulletinEdit"
-      @close="handleBulletinEditClose"
-      @success="handleBulletinEditSuccess"
-      :bulletinEditVisiable="bulletinEdit.visiable">
-    </bulletin-edit>
+    <service-add
+      v-if="serviceAdd.visiable"
+      @close="handleserviceAddClose"
+      @success="handleserviceAddSuccess"
+      :serviceAddVisiable="serviceAdd.visiable">
+    </service-add>
+    <service-edit
+      ref="serviceEdit"
+      @close="handleserviceEditClose"
+      @success="handleserviceEditSuccess"
+      :serviceEditVisiable="serviceEdit.visiable">
+    </service-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import BulletinAdd from './BulletinAdd'
-import BulletinEdit from './BulletinEdit'
+import ServiceAdd from './ServiceAdd'
+import ServiceEdit from './ServiceEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: 'Bulletin',
-  components: {BulletinAdd, BulletinEdit, RangeDate},
+  name: 'service',
+  components: {ServiceAdd, ServiceEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      bulletinAdd: {
+      serviceAdd: {
         visiable: false
       },
-      bulletinEdit: {
+      serviceEdit: {
         visiable: false
       },
       queryParams: {},
@@ -130,41 +118,14 @@ export default {
     }),
     columns () {
       return [{
-        title: '标题',
-        dataIndex: 'title',
-        scopedSlots: { customRender: 'titleShow' },
-        width: 300
+        title: '服务名称',
+        dataIndex: 'name'
       }, {
-        title: '公告内容',
-        dataIndex: 'content',
-        scopedSlots: { customRender: 'contentShow' },
-        width: 600
+        title: '服务编号',
+        dataIndex: 'code'
       }, {
-        title: '发布时间',
+        title: '创建时间',
         dataIndex: 'createDate',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '消息类型',
-        dataIndex: 'type',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag>通知</a-tag>
-            case 2:
-              return <a-tag>公告</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '上传人',
-        dataIndex: 'publisher',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -190,26 +151,26 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.bulletinAdd.visiable = true
+      this.serviceAdd.visiable = true
     },
-    handleBulletinAddClose () {
-      this.bulletinAdd.visiable = false
+    handleserviceAddClose () {
+      this.serviceAdd.visiable = false
     },
-    handleBulletinAddSuccess () {
-      this.bulletinAdd.visiable = false
-      this.$message.success('新增公告成功')
+    handleserviceAddSuccess () {
+      this.serviceAdd.visiable = false
+      this.$message.success('新增服务成功')
       this.search()
     },
     edit (record) {
-      this.$refs.bulletinEdit.setFormValues(record)
-      this.bulletinEdit.visiable = true
+      this.$refs.serviceEdit.setFormValues(record)
+      this.serviceEdit.visiable = true
     },
-    handleBulletinEditClose () {
-      this.bulletinEdit.visiable = false
+    handleserviceEditClose () {
+      this.serviceEdit.visiable = false
     },
-    handleBulletinEditSuccess () {
-      this.bulletinEdit.visiable = false
-      this.$message.success('修改公告成功')
+    handleserviceEditSuccess () {
+      this.serviceEdit.visiable = false
+      this.$message.success('修改服务成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -227,7 +188,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/bulletin-info/' + ids).then(() => {
+          that.$delete('/cos/service-sort/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -297,7 +258,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/bulletin-info/page', {
+      this.$get('/cos/service-sort/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

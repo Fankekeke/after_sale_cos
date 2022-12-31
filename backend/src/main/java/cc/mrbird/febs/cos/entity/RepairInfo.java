@@ -38,7 +38,7 @@ public class RepairInfo implements Serializable {
     private Integer staffId;
 
     /**
-     * 维修状态（1.正在检测问题 2.维修中 3. 维修完成 4.异常退回）
+     * 维修状态（1.正在检测问题 2.维修中 3.维修完成 4.异常退回）
      */
     private Integer repairStatus;
 

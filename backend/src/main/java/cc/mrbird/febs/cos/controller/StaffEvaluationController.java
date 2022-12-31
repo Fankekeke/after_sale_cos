@@ -17,7 +17,7 @@ import java.util.List;
  * @author FanK
  */
 @RestController
-@RequestMapping("/manage/staff-evaluation")
+@RequestMapping("/cos/staff-evaluation")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StaffEvaluationController {
 

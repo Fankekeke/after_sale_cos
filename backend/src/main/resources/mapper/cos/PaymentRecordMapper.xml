@@ -22,11 +22,11 @@
         1 = 1
         <if test="paymentRecord.orderCode != null and paymentRecord.orderCode != ''">
             AND pr.order_code LIKE CONCAT('%',#{paymentRecord.orderCode},'%')
-        </if>
+        </if>orderName
         <if test="paymentRecord.userName != null and paymentRecord.userName != ''">
             AND ui.NAME LIKE CONCAT('%',#{paymentRecord.userName},'%')
         </if>
-        <if test="paymentRecord.orderName != null and paymentRecord.orderName != ''">
+        <if test="paymentRecord. != null and paymentRecord.orderName != ''">
             AND pr.order_name LIKE CONCAT('%',#{paymentRecord.orderName},'%')
         </if>
         <if test="paymentRecord.serverType != null">
