@@ -40,7 +40,7 @@
     </select>
 
     <!-- 根据时间获取维修单信息 -->
-    <select id="selectRepairByDate">
+    <select id="selectRepairByDate" resultType="cc.mrbird.febs.cos.entity.RepairInfo">
         SELECT
         ri.id,
         ri.repair_code,
@@ -52,5 +52,22 @@
         repair_info ri
         WHERE 1 = 1
         ri.repair_status IN (1, 2)
+    </select>
+
+    <!-- 获取员工工作情况 -->
+    <select id="selectStaffWork" resultType="java.util.LinkedHashMap">
+        SELECT
+        si.`name`,
+        si.id,
+        IFNULL(count( ri.id ), 0) AS workStatus
+        FROM
+        staff_info si
+        LEFT JOIN repair_info ri ON ( ri.staff_id = si.id )
+        AND ri.repair_status IN ( 1, 2 )
+        WHERE
+        1 = 1
+        <if test="productId != null">
+            AND si.responsible LIKE CONCAT('%',#{productId},'%')
+        </if>
     </select>
 </mapper>
