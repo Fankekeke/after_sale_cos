@@ -29,4 +29,29 @@ public interface IStaffInfoService extends IService<StaffInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectStaffWorkStatus(String day);
+
+    /**
+     * 新增员工信息
+     *
+     * @param staffInfo 员工信息
+     * @return 结果
+     */
+    boolean saveStaff(StaffInfo staffInfo) throws Exception;
+
+    /**
+     * 更新员工状态
+     *
+     * @param staffId 员工ID
+     * @param status  状态
+     * @return 结果
+     */
+    boolean accountStatusEdit(Integer staffId, Integer status) throws Exception;
+
+    /**
+     * 获取员工工作情况
+     *
+     * @param productId 产品ID
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectStaffWork(Integer productId);
 }

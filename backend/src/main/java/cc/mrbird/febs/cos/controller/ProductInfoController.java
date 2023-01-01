@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -36,13 +38,34 @@ public class ProductInfoController {
     }
 
     /**
+     * 查询产品详情
+     *
+     * @param productId 产品ID
+     * @return 结果
+     */
+    @GetMapping("/detail/{productId}")
+    public R detail(@PathVariable("productId") Integer productId) {
+        return R.ok(productInfoService.getById(productId));
+    }
+
+    /**
      * 查询所有产品信息
      *
      * @return 结果
      */
     @GetMapping("/list")
     public R list() {
-        return R.ok(productInfoService.list());
+        List<ProductInfo> productInfoList = productInfoService.list();
+        List<LinkedHashMap<String, Object>> result = new ArrayList<>();
+        productInfoList.forEach(e -> {
+            result.add(new LinkedHashMap<String, Object>() {
+                {
+                    put("label", e.getName());
+                    put("value", e.getId());
+                }
+            });
+        });
+        return R.ok(result);
     }
 
     /**

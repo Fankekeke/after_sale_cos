@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class UserConfig {
 
-    public static final String DEFAULT_THEME = "dark";
+    public static final String DEFAULT_THEME = "light";
     public static final String DEFAULT_LAYOUT = "side";
     public static final String DEFAULT_MULTIPAGE = "0";
     public static final String DEFAULT_FIX_SIDERBAR = "1";

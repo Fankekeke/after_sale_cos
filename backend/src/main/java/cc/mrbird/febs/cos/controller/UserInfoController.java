@@ -36,6 +36,18 @@ public class UserInfoController {
     }
 
     /**
+     * 更新客户状态
+     *
+     * @param userId 客户ID
+     * @param status 状态
+     * @return 结果
+     */
+    @PostMapping("/account/status")
+    public R accountStatusEdit(@RequestParam("userId") Integer userId, @RequestParam("status") Integer status) throws Exception {
+        return R.ok(userInfoService.accountStatusEdit(userId, status));
+    }
+
+    /**
      * 新增客户信息
      *
      * @param userInfo 客户信息

@@ -4,11 +4,13 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cc.mrbird.febs.system.domain.User;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -64,10 +66,32 @@ public class StaffInfoController {
      * @return 结果
      */
     @PostMapping
-    public R save(StaffInfo staffInfo) {
-        staffInfo.setCode("ST-" + System.currentTimeMillis());
+    public R save(StaffInfo staffInfo) throws Exception {
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-        return R.ok(staffInfoService.save(staffInfo));
+        return R.ok(staffInfoService.saveStaff(staffInfo));
+    }
+
+    /**
+     * 获取员工工作情况
+     *
+     * @param productId 产品ID
+     * @return 结果
+     */
+    @GetMapping("/work/{productId}")
+    public R selectStaffWork(@PathVariable(value = "productId", required = false) Integer productId) {
+        return R.ok(staffInfoService.selectStaffWork(productId));
+    }
+
+    /**
+     * 更新员工状态
+     *
+     * @param staffId 员工ID
+     * @param status  状态
+     * @return 结果
+     */
+    @PostMapping("/account/status")
+    public R accountStatusEdit(@RequestParam("staffId") Integer staffId, @RequestParam("status") Integer status) throws Exception {
+        return R.ok(staffInfoService.accountStatusEdit(staffId, status));
     }
 
     /**

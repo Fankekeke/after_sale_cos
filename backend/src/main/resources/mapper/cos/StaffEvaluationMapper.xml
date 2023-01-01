@@ -5,22 +5,22 @@
     <!-- 分页获取员工评价信息 -->
     <select id="selectEvaluatePage" resultType="java.util.LinkedHashMap">
         SELECT
-        id,
-        user_id,
-        order_code,
-        staff_id,
-        schedule_score,
-        repair_score,
-        service_score,
-        score,
-        create_date,
+        se.id,
+        se.user_id,
+        se.order_code,
+        se.staff_id,
+        se.schedule_score,
+        se.repair_score,
+        se.service_score,
+        se.score,
+        se.create_date,
         si.NAME AS staffName,
         ui.NAME AS userName,
         oi.order_name
         FROM
         staff_evaluation se
         LEFT JOIN staff_info si ON ( si.id = se.staff_id )
-        LEFT JOIN user_info ui ui ON ( ui.id = se.user_id )
+        LEFT JOIN user_info ui ON ( ui.id = se.user_id )
         LEFT JOIN order_info oi ON ( oi.order_code = se.order_code )
         WHERE
         1 = 1

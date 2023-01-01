@@ -56,7 +56,7 @@ public class OrderInfoController {
      */
     @GetMapping("/bind/repair")
     public R setOrderRepairUser(@RequestParam("orderCode") String orderCode, @RequestParam("staffId") Integer staffId) {
-        return R.ok();
+        return R.ok(orderInfoService.setOrderRepairUser(orderCode, staffId));
     }
 
     /**

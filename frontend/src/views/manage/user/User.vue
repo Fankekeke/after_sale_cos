@@ -7,42 +7,26 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="工单编号"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.orderCode"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
                 label="客户名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.userName"/>
+                <a-input v-model="queryParams.name"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="工单名称"
+                label="客户编号"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.orderName"/>
+                <a-input v-model="queryParams.code"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="工单状态"
+                label="联系方式"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.status" allowClear>
-                  <a-select-option value="1">正在对应</a-select-option>
-                  <a-select-option value="2">已派发</a-select-option>
-                  <a-select-option value="3">缴费</a-select-option>
-                  <a-select-option value="4">正在维修</a-select-option>
-                  <a-select-option value="5">维修完成</a-select-option>
-                  <a-select-option value="6">已退换</a-select-option>
-                  <a-select-option value="7">完成</a-select-option>
-                </a-select>
+                <a-input v-model="queryParams.phone"/>
               </a-form-item>
             </a-col>
           </div>
@@ -78,16 +62,11 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="修 改"></a-icon>
+          <a-icon v-if="record.status == 2" type="caret-up" @click="editStatus(record, 1)" title="修 改"/>
+          <a-icon v-if="record.status == 1" type="caret-down" @click="editStatus(record, 2)" title="修 改"/>
         </template>
       </a-table>
     </div>
-    <order-audit
-      @close="handleorderAuditViewClose"
-      @success="handleorderAuditViewSuccess"
-      :orderAuditShow="orderAuditView.visiable"
-      :orderAuditData="orderAuditView.data">
-    </order-audit>
   </a-card>
 </template>
 
@@ -95,19 +74,18 @@
 import RangeDate from '@/components/datetime/RangeDate'
 import {mapState} from 'vuex'
 import moment from 'moment'
-import OrderAudit from './OrderAudit'
 moment.locale('zh-cn')
 
 export default {
-  name: 'order',
-  components: {OrderAudit, RangeDate},
+  name: 'user',
+  components: {RangeDate},
   data () {
     return {
       advanced: false,
-      orderAdd: {
+      userAdd: {
         visiable: false
       },
-      orderEdit: {
+      userEdit: {
         visiable: false
       },
       queryParams: {},
@@ -125,10 +103,6 @@ export default {
         showSizeChanger: true,
         showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`
       },
-      orderAuditView: {
-        visiable: false,
-        data: null
-      },
       userList: []
     }
   },
@@ -138,64 +112,38 @@ export default {
     }),
     columns () {
       return [{
-        title: '工单编号',
-        dataIndex: 'orderCode'
-      }, {
-        title: '工单名称',
-        dataIndex: 'orderName'
-      }, {
         title: '客户名称',
-        dataIndex: 'userName'
+        dataIndex: 'name'
       }, {
         title: '联系方式',
         dataIndex: 'phone'
       }, {
-        title: '服务类型',
-        dataIndex: 'serverTypeName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
+        title: '收获地址',
+        dataIndex: 'address'
       }, {
-        title: '工单图片',
-        dataIndex: 'images',
-        customRender: (text, record, index) => {
-          if (!record.images) return <a-avatar shape="square" icon="user" />
-          return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
-          </a-popover>
-        }
+        title: '省份',
+        dataIndex: 'province'
       }, {
-        title: '工单状态',
+        title: '城市',
+        dataIndex: 'city'
+      }, {
+        title: '区',
+        dataIndex: 'area'
+      }, {
+        title: '状态',
         dataIndex: 'status',
         customRender: (text, row, index) => {
           switch (text) {
-            case 0:
-              return <a-tag>正在对应</a-tag>
             case 1:
-              return <a-tag>已派发</a-tag>
+              return <a-tag color="green">正常</a-tag>
             case 2:
-              return <a-tag>缴费</a-tag>
-            case 3:
-              return <a-tag>正在维修</a-tag>
-            case 4:
-              return <a-tag>维修完成</a-tag>
-            case 5:
-              return <a-tag>已退换</a-tag>
-            case 6:
-              return <a-tag>完成</a-tag>
+              return <a-tag color="red">异常</a-tag>
             default:
               return '- -'
           }
         }
       }, {
-        title: '创建时间',
+        title: '注册时间',
         dataIndex: 'createDate',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -215,17 +163,11 @@ export default {
     this.fetch()
   },
   methods: {
-    orderAuditOpen (row) {
-      this.orderAuditView.data = row
-      this.orderAuditView.visiable = true
-    },
-    handleorderAuditViewClose () {
-      this.orderAuditView.visiable = false
-    },
-    handleorderAuditViewSuccess () {
-      this.orderAuditView.visiable = false
-      this.$message.success('审核成功')
-      this.fetch()
+    editStatus (row, status) {
+      this.$post('/cos/user-info/account/status', { staffId: row.id, status }).then((r) => {
+        this.$message.success('修改成功')
+        this.fetch()
+      })
     },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
@@ -234,25 +176,25 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.orderAdd.visiable = true
+      this.userAdd.visiable = true
     },
-    handleorderAddClose () {
-      this.orderAdd.visiable = false
+    handleuserAddClose () {
+      this.userAdd.visiable = false
     },
-    handleorderAddSuccess () {
-      this.orderAdd.visiable = false
+    handleuserAddSuccess () {
+      this.userAdd.visiable = false
       this.$message.success('新增产品成功')
       this.search()
     },
     edit (record) {
-      this.$refs.orderEdit.setFormValues(record)
-      this.orderEdit.visiable = true
+      this.$refs.userEdit.setFormValues(record)
+      this.userEdit.visiable = true
     },
-    handleorderEditClose () {
-      this.orderEdit.visiable = false
+    handleuserEditClose () {
+      this.userEdit.visiable = false
     },
-    handleorderEditSuccess () {
-      this.orderEdit.visiable = false
+    handleuserEditSuccess () {
+      this.userEdit.visiable = false
       this.$message.success('修改产品成功')
       this.search()
     },
@@ -271,7 +213,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/order-info/' + ids).then(() => {
+          that.$delete('/cos/user-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -341,10 +283,10 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.status === undefined) {
-        delete params.status
+      if (params.type === undefined) {
+        delete params.type
       }
-      this.$get('/cos/order-info/page', {
+      this.$get('/cos/user-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

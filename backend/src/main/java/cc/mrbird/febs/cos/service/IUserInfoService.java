@@ -20,4 +20,13 @@ public interface IUserInfoService extends IService<UserInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectUserPage(Page<UserInfo> page, UserInfo userInfo);
+
+    /**
+     * 更新客户状态
+     *
+     * @param userId 客户ID
+     * @param status 状态
+     * @return 结果
+     */
+    boolean accountStatusEdit(Integer userId, Integer status) throws Exception;
 }
