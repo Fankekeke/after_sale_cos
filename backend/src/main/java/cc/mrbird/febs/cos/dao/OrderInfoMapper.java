@@ -36,4 +36,12 @@ public interface OrderInfoMapper extends BaseMapper<OrderInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectOrderServiceTypeRate();
+
+    /**
+     * 根据维修编号获取工单信息
+     *
+     * @param repairCode 维修编号
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectOrderDetail(@Param("repairCode") String repairCode);
 }

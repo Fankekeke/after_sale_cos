@@ -41,8 +41,19 @@ public class RepairInfoServiceImpl extends ServiceImpl<RepairInfoMapper, RepairI
         RepairInfo repairInfo = new RepairInfo();
         repairInfo.setRepairCode("RE-" + System.currentTimeMillis());
         repairInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-        repairInfo.setRepairStatus(1);
+        repairInfo.setRepairStatus(0);
         repairInfo.setStaffId(staffId);
         return this.save(repairInfo);
+    }
+
+    /**
+     * 维修单详情
+     *
+     * @param repairCode 维修编号
+     * @return 结果
+     */
+    @Override
+    public LinkedHashMap<String, Object> selectRepairDetail(String repairCode) {
+        return baseMapper.selectRepairDetail(repairCode);
     }
 }

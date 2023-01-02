@@ -1,11 +1,8 @@
 package cc.mrbird.febs.cos.service.impl;
 
 import cc.mrbird.febs.cos.dao.PaymentRecordMapper;
-import cc.mrbird.febs.cos.entity.BulletinInfo;
-import cc.mrbird.febs.cos.entity.OrderInfo;
+import cc.mrbird.febs.cos.entity.*;
 import cc.mrbird.febs.cos.dao.OrderInfoMapper;
-import cc.mrbird.febs.cos.entity.RepairInfo;
-import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.*;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
@@ -42,6 +39,8 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     private final IPaymentRecordService paymentRecordService;
 
     private final PaymentRecordMapper paymentRecordMapper;
+
+    private final IReserveInfoService reserveInfoService;
 
     /**
      * 分页获取工单信息
@@ -166,5 +165,58 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
                 return;
             }
         }
+    }
+
+    /**
+     * 工单分配
+     *
+     * @param staffId 员工ID
+     * @param date    预约时间
+     * @param amount  收费价格
+     * @param remark  备注
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean orderDistribute(String orderName, String orderCode, Integer staffId, String date, BigDecimal amount, String remark) {
+        // 获取工单信息
+        OrderInfo orderInfo = this.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getOrderCode, orderCode));
+        // 添加预约记录
+        ReserveInfo reserveInfo = new ReserveInfo();
+        reserveInfo.setUserId(orderInfo.getCustomerId());
+        reserveInfo.setRemark(orderInfo.getRemark());
+        reserveInfo.setImages(orderInfo.getImages());
+        reserveInfo.setProductId(orderInfo.getProductId());
+        reserveInfo.setReserveDate(date);
+        reserveInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        reserveInfo.setOpenFlag(0);
+        reserveInfo.setOrderCode(orderCode);
+        reserveInfoService.save(reserveInfo);
+        // 添加维修记录
+        RepairInfo repairInfo = new RepairInfo();
+        repairInfo.setRepairStatus(0);
+        repairInfo.setRepairCode("RE-" + System.currentTimeMillis());
+        repairInfo.setStaffId(staffId);
+        repairInfo.setRemark(remark);
+        repairInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        repairInfoService.save(repairInfo);
+        // 更新工单状态
+        orderInfo.setStaffId(staffId);
+        orderInfo.setOrderName(orderName);
+        orderInfo.setMoney(amount);
+        orderInfo.setRepairCode(repairInfo.getRepairCode());
+        orderInfo.setStatus(1);
+        return this.updateById(orderInfo);
+    }
+
+    /**
+     * 根据维修编号获取工单信息
+     *
+     * @param repairCode 维修编号
+     * @return 结果
+     */
+    @Override
+    public LinkedHashMap<String, Object> selectOrderDetail(String repairCode) {
+        return baseMapper.selectOrderDetail(repairCode);
     }
 }

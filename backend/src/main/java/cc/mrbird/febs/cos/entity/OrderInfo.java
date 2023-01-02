@@ -64,7 +64,7 @@ public class OrderInfo implements Serializable {
     private String images;
 
     /**
-     * 工单状态（0.正在对应 1.已派发 2.缴费 3.正在维修 4.维修完成 5.已退换 6.完成）
+     * 工单状态（0.正在对应 1.已派发 2.缴费 3.正在维修 4.维修完成 5.已退换 6.完成 7.驳回）
      */
     private Integer status;
 

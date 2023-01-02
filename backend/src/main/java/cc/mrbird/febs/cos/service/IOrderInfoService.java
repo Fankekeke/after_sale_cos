@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 /**
@@ -45,4 +46,23 @@ public interface IOrderInfoService extends IService<OrderInfo> {
      * @param orderCode 工单编号
      */
     void automaticDispatch(String orderCode);
+
+    /**
+     * 工单分配
+     *
+     * @param staffId 员工ID
+     * @param date    预约时间
+     * @param amount  收费价格
+     * @param remark  备注
+     * @return 结果
+     */
+    boolean orderDistribute(String orderName, String orderCode, Integer staffId, String date, BigDecimal amount, String remark);
+
+    /**
+     * 根据维修编号获取工单信息
+     *
+     * @param repairCode 维修编号
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectOrderDetail(String repairCode);
 }

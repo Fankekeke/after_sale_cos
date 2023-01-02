@@ -57,6 +57,8 @@ public class ReserveInfo implements Serializable {
      */
     private String createDate;
 
+    private String orderCode;
+
     /**
      * 开关状态（0.开启 1.已受理 2.退回）
      */

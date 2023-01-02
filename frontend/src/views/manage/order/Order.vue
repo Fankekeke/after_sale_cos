@@ -35,13 +35,14 @@
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-select v-model="queryParams.status" allowClear>
-                  <a-select-option value="1">正在对应</a-select-option>
-                  <a-select-option value="2">已派发</a-select-option>
-                  <a-select-option value="3">缴费</a-select-option>
-                  <a-select-option value="4">正在维修</a-select-option>
-                  <a-select-option value="5">维修完成</a-select-option>
-                  <a-select-option value="6">已退换</a-select-option>
-                  <a-select-option value="7">完成</a-select-option>
+                  <a-select-option value="0">正在对应</a-select-option>
+                  <a-select-option value="1">已派发</a-select-option>
+                  <a-select-option value="2">缴费</a-select-option>
+                  <a-select-option value="3">正在维修</a-select-option>
+                  <a-select-option value="4">维修完成</a-select-option>
+                  <a-select-option value="5">已退换</a-select-option>
+                  <a-select-option value="6">完成</a-select-option>
+                  <a-select-option value="7">驳回</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -78,7 +79,9 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="修 改"></a-icon>
+          <a-icon type="file-search" @click="orderViewOpen(record)" title="详 情"></a-icon>
+          <a-icon v-if="record.status == 0" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="修 改" style="margin-left: 15px"></a-icon>
+
         </template>
       </a-table>
     </div>
@@ -88,6 +91,11 @@
       :orderAuditShow="orderAuditView.visiable"
       :orderAuditData="orderAuditView.data">
     </order-audit>
+    <order-view
+      @close="handleorderViewClose"
+      :orderShow="orderView.visiable"
+      :orderData="orderView.data">
+    </order-view>
   </a-card>
 </template>
 
@@ -96,11 +104,12 @@ import RangeDate from '@/components/datetime/RangeDate'
 import {mapState} from 'vuex'
 import moment from 'moment'
 import OrderAudit from './OrderAudit'
+import OrderView from './OrderView'
 moment.locale('zh-cn')
 
 export default {
   name: 'order',
-  components: {OrderAudit, RangeDate},
+  components: {OrderView, OrderAudit, RangeDate},
   data () {
     return {
       advanced: false,
@@ -109,6 +118,10 @@ export default {
       },
       orderEdit: {
         visiable: false
+      },
+      orderView: {
+        visiable: false,
+        data: null
       },
       queryParams: {},
       filteredInfo: null,
@@ -190,6 +203,8 @@ export default {
               return <a-tag>已退换</a-tag>
             case 6:
               return <a-tag>完成</a-tag>
+            case 7:
+              return <a-tag>驳回</a-tag>
             default:
               return '- -'
           }
@@ -218,6 +233,13 @@ export default {
     orderAuditOpen (row) {
       this.orderAuditView.data = row
       this.orderAuditView.visiable = true
+    },
+    orderViewOpen (row) {
+      this.orderView.data = row
+      this.orderView.visiable = true
+    },
+    handleorderViewClose () {
+      this.orderView.visiable = false
     },
     handleorderAuditViewClose () {
       this.orderAuditView.visiable = false

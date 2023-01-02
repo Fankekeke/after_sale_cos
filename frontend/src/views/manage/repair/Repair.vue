@@ -35,10 +35,11 @@
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-select v-model="queryParams.repairStatus" allowClear>
+                  <a-select-option value="0">待接收</a-select-option>
                   <a-select-option value="1">正在检测问题</a-select-option>
                   <a-select-option value="2">维修中</a-select-option>
                   <a-select-option value="3">维修完成</a-select-option>
-                  <a-select-option value="3">异常退回</a-select-option>
+                  <a-select-option value="4">异常退回</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -75,10 +76,22 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
+          <a-icon type="file-search" @click="repairViewOpen(record)" title="详 情"></a-icon>
+          <a-icon type="apartment" @click="repairAuditOpen(record)" title="修 改" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
+    <repair-view
+      @close="handleRepairViewClose"
+      :repairShow="repairView.visiable"
+      :repairData="repairView.data">
+    </repair-view>
+    <repair-replace
+      @close="handleRepairAuditClose"
+      @success="handleRepairAuditSuccess"
+      :repairShow="repairAudit.visiable"
+      :repairData="repairAudit.data">
+    </repair-replace>
   </a-card>
 </template>
 
@@ -86,11 +99,13 @@
 import RangeDate from '@/components/datetime/RangeDate'
 import {mapState} from 'vuex'
 import moment from 'moment'
+import RepairView from './RepairView'
+import RepairReplace from './RepairReplace'
 moment.locale('zh-cn')
 
 export default {
   name: 'repair',
-  components: {RangeDate},
+  components: {RepairReplace, RepairView, RangeDate},
   data () {
     return {
       advanced: false,
@@ -99,6 +114,14 @@ export default {
       },
       repairEdit: {
         visiable: false
+      },
+      repairView: {
+        visiable: false,
+        data: null
+      },
+      repairAudit: {
+        visiable: false,
+        data: null
       },
       queryParams: {},
       filteredInfo: null,
@@ -134,6 +157,8 @@ export default {
         dataIndex: 'repairStatus',
         customRender: (text, row, index) => {
           switch (text) {
+            case 0:
+              return <a-tag>待接收</a-tag>
             case 1:
               return <a-tag>正在检测问题</a-tag>
             case 2:
@@ -199,6 +224,25 @@ export default {
     this.fetch()
   },
   methods: {
+    repairAuditOpen (row) {
+      this.repairAudit.data = row
+      this.repairAudit.visiable = true
+    },
+    handleRepairAuditClose () {
+      this.repairAudit.visiable = false
+    },
+    handleRepairAuditSuccess () {
+      this.repairAudit.visiable = false
+      this.$message.success('更换维修人员成功')
+      this.fetch()
+    },
+    repairViewOpen (row) {
+      this.repairView.data = row
+      this.repairView.visiable = true
+    },
+    handleRepairViewClose () {
+      this.repairView.visiable = false
+    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },

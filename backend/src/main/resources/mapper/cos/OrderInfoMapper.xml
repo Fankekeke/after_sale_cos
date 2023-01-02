@@ -85,4 +85,32 @@
         WHERE 1 = 1
         GROUP BY oi.product_id
     </select>
+
+    <!-- 根据维修编号获取工单信息 -->
+    <select id="selectOrderDetail" resultType="java.util.LinkedHashMap">
+        SELECT
+        oi.id,
+        oi.order_name,
+        oi.repair_code,
+        oi.order_code,
+        oi.server_type,
+        oi.money,
+        oi.remark,
+        oi.images,
+        oi.status,
+        oi.customer_id,
+        oi.product_id,
+        oi.staff_id,
+        oi.create_date,
+        ui.name as userName,
+        ui.phone,
+        ss.name AS serverTypeName
+        FROM
+        order_info oi
+        LEFT JOIN user_info ui ON ( ui.id = oi.customer_id )
+        LEFT JOIN service_sort ss ON (ss.id = oi.server_type)
+        WHERE
+        1 = 1
+        AND oi.repair_code = #{repairCode}
+    </select>
 </mapper>

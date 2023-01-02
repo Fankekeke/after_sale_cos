@@ -37,4 +37,12 @@ public interface RepairInfoMapper extends BaseMapper<RepairInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectStaffWork(@Param("productId") Integer productId);
+
+    /**
+     * 维修单详情
+     *
+     * @param repairCode 维修编号
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectRepairDetail(@Param("repairCode") String repairCode);
 }

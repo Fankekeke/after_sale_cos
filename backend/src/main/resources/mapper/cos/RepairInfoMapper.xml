@@ -12,6 +12,7 @@
         ri.remark,
         ri.create_date,
         oi.order_name,
+        pi1.id AS productId,
         si.NAME AS staffName,
         pi1.NAME AS productName,
         pi1.`type` AS productType,
@@ -51,7 +52,7 @@
         FROM
         repair_info ri
         WHERE 1 = 1
-        ri.repair_status IN (1, 2)
+        ri.repair_status IN (0, 1, 2)
     </select>
 
     <!-- 获取员工工作情况 -->
@@ -63,11 +64,37 @@
         FROM
         staff_info si
         LEFT JOIN repair_info ri ON ( ri.staff_id = si.id )
-        AND ri.repair_status IN ( 1, 2 )
+        AND ri.repair_status IN ( 0, 1, 2 )
         WHERE
         1 = 1
         <if test="productId != null">
             AND si.responsible LIKE CONCAT('%',#{productId},'%')
         </if>
+        GROUP BY si.id
+    </select>
+
+    <!-- 维修单详情 -->
+    <select id="selectRepairDetail" resultType="java.util.LinkedHashMap">
+        SELECT
+        ri.id,
+        ri.repair_code,
+        ri.staff_id,
+        ri.repair_status,
+        ri.remark,
+        ri.create_date,
+        oi.order_name,
+        si.NAME AS staffName,
+        pi1.id AS productId,
+        pi1.NAME AS productName,
+        pi1.`type` AS productType,
+        pi1.images
+        FROM
+        repair_info ri
+        LEFT JOIN staff_info si ON ( si.id = ri.staff_id )
+        LEFT JOIN order_info oi ON ( oi.repair_code = ri.repair_code )
+        LEFT JOIN product_info pi1 ON ( pi1.id = oi.product_id )
+        WHERE
+        1 = 1
+        AND ri.repair_code = #{repairCode}
     </select>
 </mapper>

@@ -4,7 +4,7 @@
       <a-button key="back" @click="submit" type="primary">
         确认
       </a-button>
-      <a-button key="back" @click="submit" type="danger">
+      <a-button key="reject" @click="orderReject" type="danger">
         驳回
       </a-button>
       <a-button @click="onClose">
@@ -72,13 +72,18 @@
       </a-divider>
       <a-row style="padding-left: 24px;padding-right: 24px;" :gutter="50">
         <a-col :span="24" style="margin-bottom: 15px">
-          <a-radio-group default-value="a" button-style="solid">
+          <a-radio-group v-model="auditData.staffId" button-style="solid">
             <a-radio-button v-for="(item, index) in staffList" :key="index" :value="item.id">
               {{ item.name }}（{{ item.workStatus > 0 ? '工作' : '空闲' }}）
             </a-radio-button>
           </a-radio-group>
         </a-col>
         <br/>
+        <a-col :span="12">
+          <a-form-item label='工单名称' v-bind="formItemLayout">
+            <a-input v-model="auditData.orderName"/>
+          </a-form-item>
+        </a-col>
         <a-col :span="12">
           <a-form-item label='收费价格' v-bind="formItemLayout">
             <a-input-number v-model="auditData.price" :min="0" :max="99999" style="width: 100%"/>
@@ -111,6 +116,10 @@ function getBase64 (file) {
   })
 }
 moment.locale('zh-cn')
+const formItemLayout = {
+  labelCol: { span: 24 },
+  wrapperCol: { span: 24 }
+}
 export default {
   name: 'OrderAudit',
   props: {
@@ -146,11 +155,13 @@ export default {
   },
   data () {
     return {
+      formItemLayout,
       loading: false,
       fileList: [],
       previewVisible: false,
       previewImage: '',
       auditData: {
+        orderName: '',
         staffId: null,
         price: 0,
         reserveDate: '',
@@ -191,7 +202,33 @@ export default {
         this.fileList = imageList
       }
     },
+    orderReject () {
+      this.$get(`/cos/order-info/reject/${this.orderAuditData.orderCode}`).then((r) => {
+        this.$emit('success')
+      })
+    },
     submit () {
+      if (this.auditData.staffId === null) {
+        this.$message.error('请选择维修人员')
+        return false
+      }
+      if (this.auditData.orderName === '') {
+        this.$message.error('请输入工单名称')
+        return false
+      }
+      if (this.auditData.reserveDate === '') {
+        this.auditData.reserveDate = moment(new Date()).format('YYYY-MM-DD')
+      }
+      this.$get(`/cos/order-info/distribute`, {
+        'orderName': this.orderAuditData.orderName,
+        'orderCode': this.orderAuditData.orderCode,
+        'staffId': this.auditData.staffId,
+        'date': this.auditData.reserveDate,
+        'money': this.auditData.price,
+        'remark': this.auditData.remark
+      }).then((r) => {
+        this.$emit('success')
+      })
     },
     onClose () {
       this.$emit('close')

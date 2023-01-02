@@ -37,6 +37,17 @@ public class ReserveInfoController {
     }
 
     /**
+     * 查询预约详情
+     *
+     * @param orderCode 工单编号
+     * @return 结果
+     */
+    @GetMapping("/detail/{orderCode}")
+    public R selectReserveDetail(@PathVariable("orderCode") String orderCode) {
+        return R.ok(reserveInfoService.getOne(Wrappers.<ReserveInfo>lambdaQuery().eq(ReserveInfo::getOrderCode, orderCode)));
+    }
+
+    /**
      * 修改预约信息状态
      *
      * @param reserveId 预约ID

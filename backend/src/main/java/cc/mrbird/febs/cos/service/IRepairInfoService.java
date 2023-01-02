@@ -28,4 +28,12 @@ public interface IRepairInfoService extends IService<RepairInfo> {
      * @return 结果
      */
     boolean saveRepair(Integer staffId);
+
+    /**
+     * 维修单详情
+     *
+     * @param repairCode 维修编号
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectRepairDetail(String repairCode);
 }

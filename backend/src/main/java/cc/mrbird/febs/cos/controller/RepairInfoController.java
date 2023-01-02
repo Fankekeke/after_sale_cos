@@ -37,6 +37,17 @@ public class RepairInfoController {
     }
 
     /**
+     * 维修单详情
+     *
+     * @param repairCode 维修编号
+     * @return 结果
+     */
+    @GetMapping("/detail/{repairCode}")
+    public R selectRepairDetail(@PathVariable("repairCode") String repairCode) {
+        return R.ok(repairInfoService.selectRepairDetail(repairCode));
+    }
+
+    /**
      * 修改维修单状态
      *
      * @param repairId 维修信息ID
