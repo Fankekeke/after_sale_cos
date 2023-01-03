@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author FanK
@@ -81,6 +81,83 @@ public class StaffEvaluationServiceImpl extends ServiceImpl<StaffEvaluationMappe
         int size = evaluationList.size();
         result.replaceAll((k, v) -> v.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_UP));
 
+        return result;
+    }
+
+    /**
+     * 员工评价统计
+     *
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> selectEvaluateListByStaff() {
+        // 获取所有员工信息
+        List<StaffInfo> staffInfoList = staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStatus, 1));
+        if (CollectionUtil.isEmpty(staffInfoList)) {
+            return Collections.emptyList();
+        }
+        List<LinkedHashMap<String, Object>> result = new ArrayList<>();
+        // 所有评价信息
+        List<StaffEvaluation> evaluationList = this.list();
+        if (CollectionUtil.isEmpty(evaluationList)) {
+            staffInfoList.forEach(e -> {
+                result.add(new LinkedHashMap<String, Object>() {
+                    {
+                        put("staff", e);
+                        put("scheduleScore", BigDecimal.ZERO);
+                        put("repairScore", BigDecimal.ZERO);
+                        put("serviceScore", BigDecimal.ZERO);
+                        put("score", BigDecimal.ZERO);
+                    }
+                });
+            });
+            return result;
+        }
+        // 将评价信息按员工code转Map
+        Map<Integer, List<StaffEvaluation>> staffEvaluateMap = evaluationList.stream().collect(Collectors.groupingBy(StaffEvaluation::getStaffId));
+        staffInfoList.forEach(e -> {
+            List<StaffEvaluation> staffEvaluationList = staffEvaluateMap.get(e.getId());
+            LinkedHashMap<String, BigDecimal> evaluateItem = new LinkedHashMap<String, BigDecimal>() {
+                {
+                    put("scheduleScore", BigDecimal.ZERO);
+                    put("repairScore", BigDecimal.ZERO);
+                    put("serviceScore", BigDecimal.ZERO);
+                    put("score", BigDecimal.ZERO);
+                }
+            };
+            if (CollectionUtil.isNotEmpty(staffEvaluationList)) {
+                staffEvaluationList.forEach(evaluation -> {
+                    evaluateItem.put("scheduleScore", evaluateItem.get("scheduleScore").add(evaluation.getScheduleScore()));
+                    evaluateItem.put("repairScore", evaluateItem.get("repairScore").add(evaluation.getRepairScore()));
+                    evaluateItem.put("serviceScore", evaluateItem.get("serviceScore").add(evaluation.getServiceScore()));
+                    evaluateItem.put("score", evaluateItem.get("score").add(evaluation.getScore()));
+                });
+
+                int size = evaluationList.size();
+                evaluateItem.replaceAll((k, v) -> v.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_UP));
+
+                LinkedHashMap<String, Object> evaluateItemAll = new LinkedHashMap<String, Object>() {
+                    {
+                        put("staff", e);
+                    }
+                };
+                evaluateItem.keySet().forEach(scoreName -> {
+                    evaluateItemAll.put(scoreName, evaluateItem.get(scoreName));
+                });
+                result.add(evaluateItemAll);
+            } else {
+                evaluateItem.replaceAll((k, v) -> BigDecimal.valueOf(80));
+                LinkedHashMap<String, Object> evaluateItemAll = new LinkedHashMap<String, Object>() {
+                    {
+                        put("staff", e);
+                    }
+                };
+                evaluateItem.keySet().forEach(scoreName -> {
+                    evaluateItemAll.put(scoreName, evaluateItem.get(scoreName));
+                });
+                result.add(evaluateItemAll);
+            }
+        });
         return result;
     }
 }

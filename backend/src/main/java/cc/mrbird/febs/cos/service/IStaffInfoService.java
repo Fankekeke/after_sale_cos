@@ -54,4 +54,11 @@ public interface IStaffInfoService extends IService<StaffInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectStaffWork(Integer productId);
+
+    /**
+     * 员工评价统计
+     *
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectStaffWorkStatus();
 }

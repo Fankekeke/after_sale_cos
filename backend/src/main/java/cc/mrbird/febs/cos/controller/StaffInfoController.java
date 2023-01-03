@@ -50,6 +50,16 @@ public class StaffInfoController {
     }
 
     /**
+     * 查询员工工作状态
+     *
+     * @return 结果
+     */
+    @GetMapping("/workStatus")
+    public R selectStaffWorkStatus() {
+        return R.ok(staffInfoService.selectStaffWorkStatus());
+    }
+
+    /**
      * 查询所有员工信息
      *
      * @return 结果

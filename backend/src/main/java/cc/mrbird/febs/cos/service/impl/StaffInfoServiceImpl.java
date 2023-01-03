@@ -5,6 +5,7 @@ import cc.mrbird.febs.cos.dao.RepairInfoMapper;
 import cc.mrbird.febs.cos.entity.RepairInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.dao.StaffInfoMapper;
+import cc.mrbird.febs.cos.entity.vo.RepairVo;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cc.mrbird.febs.system.domain.User;
 import cc.mrbird.febs.system.service.UserService;
@@ -134,5 +135,39 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
     @Override
     public List<LinkedHashMap<String, Object>> selectStaffWork(Integer productId) {
         return repairInfoMapper.selectStaffWork(productId);
+    }
+
+    /**
+     * 员工评价统计
+     *
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> selectStaffWorkStatus() {
+        // 员工信息
+        List<StaffInfo> staffInfoList = this.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStatus, 1));
+        if (CollectionUtil.isEmpty(staffInfoList)) {
+            return Collections.emptyList();
+        }
+        // 查询所有维修信息
+        List<Integer> workStatusList = new ArrayList<Integer>(Arrays.asList(0, 1, 2));
+        List<RepairVo> repairInfoList = baseMapper.selectRepairByStatus(workStatusList);
+        // 按员工转MAP
+        Map<Integer, List<RepairVo>> repairInfoMap = repairInfoList.stream().collect(Collectors.groupingBy(RepairVo::getStaffId));
+        // 返回数据
+        List<LinkedHashMap<String, Object>> result = new ArrayList<>();
+        staffInfoList.forEach(e -> {
+            List<RepairVo> repairVoList = repairInfoMap.get(e.getId());
+            LinkedHashMap<String, Object> repairItem = new LinkedHashMap<String, Object>() {
+                {
+                    put("staff", e);
+                }
+            };
+            if (CollectionUtil.isNotEmpty(repairVoList)) {
+                repairItem.put("repair", repairInfoList);
+            }
+            result.add(repairItem);
+        });
+        return result;
     }
 }

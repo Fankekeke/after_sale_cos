@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author FanK
@@ -29,4 +30,11 @@ public interface IStaffEvaluationService extends IService<StaffEvaluation> {
      * @return 结果
      */
     LinkedHashMap<String, BigDecimal> selectEvaluateByStaff(Integer staffId);
+
+    /**
+     * 员工评价统计
+     *
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectEvaluateListByStaff();
 }

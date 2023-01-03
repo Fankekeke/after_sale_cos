@@ -36,6 +36,16 @@ public class StaffEvaluationController {
     }
 
     /**
+     * 员工评价统计
+     *
+     * @return 结果
+     */
+    @GetMapping("/staff/evaluate")
+    public R selectEvaluateListByStaff() {
+        return R.ok(staffEvaluationService.selectEvaluateListByStaff());
+    }
+
+    /**
      * 根据员工查询综合评价信息
      *
      * @param staffId 员工ID
