@@ -23,7 +23,7 @@ public class RepairVo extends RepairInfo implements Serializable {
 
     private String images;
 
-    private Integer productName;
+    private String productName;
 
     private Integer productTypeName;
 

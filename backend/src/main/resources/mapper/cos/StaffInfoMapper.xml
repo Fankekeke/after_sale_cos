@@ -48,8 +48,7 @@
         oi.images,
         si.NAME AS staffName,
         pi1.NAME AS productName,
-        pi1.`type` AS productTypeName,
-        pi1.images
+        pi1.`type` AS productTypeName
         FROM
         repair_info ri
         LEFT JOIN staff_info si ON ( si.id = ri.staff_id )
@@ -57,7 +56,7 @@
         LEFT JOIN product_info pi1 ON ( pi1.id = oi.product_id )
         WHERE
         1 = 1
-        ri.repair_status IN
+        AND ri.repair_status IN
         <foreach item="id" collection="statusList" open="(" separator="," close=")">
             #{id}
         </foreach>
