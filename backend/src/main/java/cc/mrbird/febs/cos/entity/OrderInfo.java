@@ -91,4 +91,7 @@ public class OrderInfo implements Serializable {
     @TableField(exist = false)
     private String userName;
 
+    @TableField(exist = true)
+    private Long userId;
+
 }

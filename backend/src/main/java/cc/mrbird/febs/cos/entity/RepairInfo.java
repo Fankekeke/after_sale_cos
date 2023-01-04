@@ -57,4 +57,7 @@ public class RepairInfo implements Serializable {
 
     @TableField(exist = false)
     private String staffName;
+
+    @TableField(exist = false)
+    private Long userId;
 }

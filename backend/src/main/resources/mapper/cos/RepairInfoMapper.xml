@@ -36,6 +36,9 @@
         <if test="repairInfo.staffName != null and repairInfo.staffName != ''">
             AND si.order_name LIKE CONCAT('%',#{repairInfo.staffName},'%')
         </if>
+        <if test="repairInfo.userId != null">
+            AND si.user_id = #{repairInfo.userId}
+        </if>
         ORDER BY
         ri.create_date DESC
     </select>
