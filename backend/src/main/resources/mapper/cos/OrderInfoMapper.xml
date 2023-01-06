@@ -116,4 +116,24 @@
         1 = 1
         AND oi.repair_code = #{repairCode}
     </select>
+
+    <!-- 本月收益 -->
+    <select id="selectIncomeMonth" resultType="java.math.BigDecimal">
+
+    </select>
+
+    <!-- 本月工单 -->
+    <select id="selectWorkOrderMonth" resultType="java.lang.Integer">
+
+    </select>
+
+    <!-- 本月已完成工单 -->
+    <select id="selectCompletedWorkOrder" resultType="java.lang.Integer">
+
+    </select>
+
+    <!-- 本月维修工单 -->
+    <select id="selectCompletedRepairOrder" resultType="java.lang.Integer">
+
+    </select>
 </mapper>

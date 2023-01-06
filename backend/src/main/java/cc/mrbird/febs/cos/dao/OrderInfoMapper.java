@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -44,4 +45,32 @@ public interface OrderInfoMapper extends BaseMapper<OrderInfo> {
      * @return 结果
      */
     LinkedHashMap<String, Object> selectOrderDetail(@Param("repairCode") String repairCode);
+
+    /**
+     * 本月收益
+     *
+     * @return 结果
+     */
+    BigDecimal selectIncomeMonth();
+
+    /**
+     * 本月工单
+     *
+     * @return 结果
+     */
+    Integer selectWorkOrderMonth();
+
+    /**
+     * 本月已完成工单
+     *
+     * @return 结果
+     */
+    Integer selectCompletedWorkOrder();
+
+    /**
+     * 本月维修工单
+     *
+     * @return 结果
+     */
+    Integer selectCompletedRepairOrder();
 }

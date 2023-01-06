@@ -66,6 +66,11 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         LinkedHashMap<String, Object> result = new LinkedHashMap<>();
         // 管理员展示信息
         if (roleId == 74) {
+            // 本月收益
+
+            // 本月工单
+            // 本月已完成
+            // 维修工单
             // 客户数量
             Integer userNum = userInfoService.count();
             // 员工数量

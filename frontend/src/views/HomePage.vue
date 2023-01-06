@@ -11,7 +11,7 @@
               {{welcomeMessage}}
             </div>
             <div class="head-info-desc">
-              <p>{{user.deptName ? user.deptName : '暂无部门'}} | {{user.roleName ? user.roleName : '暂无角色'}}</p>
+              <p>{{user.roleName ? user.roleName : '暂无角色'}}</p>
             </div>
             <div class="head-info-time">上次登录时间：{{user.lastLoginTime ? user.lastLoginTime : '第一次访问系统'}}</div>
           </div>
@@ -40,85 +40,6 @@
       <a-col :span="12" class="visit-count-wrapper">
         <a-card class="visit-count">
           <apexchart ref="count" type=bar height=300 :options="chartOptions" :series="series" />
-        </a-card>
-      </a-col>
-      <a-col :span="12" class="project-wrapper">
-        <a-card title="进行中的项目" class="project-card">
-          <a href="https://github.com/wuyouzhuguli?tab=repositories" target="_blank" slot="extra">所有项目</a>
-          <table>
-            <tr>
-              <td>
-                <div class="project-avatar-wrapper">
-                  <a-avatar class="project-avatar">{{projects[0].avatar}}</a-avatar>
-                </div>
-                <div class="project-detail">
-                  <div class="project-name">
-                    {{projects[0].name}}
-                  </div>
-                  <div class="project-desc">
-                    <p>{{projects[0].des}}</p>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="project-avatar-wrapper">
-                  <a-avatar class="project-avatar">{{projects[1].avatar}}</a-avatar>
-                </div>
-                <div class="project-detail">
-                  <div class="project-name">
-                    {{projects[1].name}}
-                  </div>
-                  <div class="project-desc">
-                    <p>{{projects[1].des}}</p>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="project-avatar-wrapper">
-                  <a-avatar class="project-avatar">{{projects[2].avatar}}</a-avatar>
-                </div>
-                <div class="project-detail">
-                  <div class="project-name">
-                    {{projects[2].name}}
-                  </div>
-                  <div class="project-desc">
-                    <p>{{projects[2].des}}</p>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="project-avatar-wrapper">
-                  <a-avatar class="project-avatar">{{projects[3].avatar}}</a-avatar>
-                </div>
-                <div class="project-detail">
-                  <div class="project-name">
-                    {{projects[3].name}}
-                  </div>
-                  <div class="project-desc">
-                    <p>{{projects[3].des}}</p>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="project-avatar-wrapper">
-                  <a-avatar class="project-avatar">{{projects[4].avatar}}</a-avatar>
-                </div>
-                <div class="project-detail">
-                  <div class="project-name">
-                    {{projects[4].name}}
-                  </div>
-                  <div class="project-desc">
-                    <p>{{projects[4].des}}</p>
-                  </div>
-                </div>
-              </td>
-              <td></td>
-            </tr>
-          </table>
         </a-card>
       </a-col>
     </a-row>
@@ -164,33 +85,6 @@ export default {
 
         }
       },
-      projects: [
-        {
-          name: 'FEBS-Shiro',
-          des: 'Spring Boot 2.0.4 & Shiro1.4.0 权限管理系统。',
-          avatar: 'F'
-        },
-        {
-          name: 'FEBS-Security',
-          des: 'Spring Boot 2.0.4 & Spring Security 5.0.7 权限管理系统。',
-          avatar: 'F'
-        },
-        {
-          name: 'SpringAll',
-          des: '循序渐进学习Spring Boot、Spring Cloud与Spring Security。',
-          avatar: 'S'
-        },
-        {
-          name: 'FEBS-Shiro-Vue',
-          des: 'FEBS-Shiro前后端分离版本，前端架构采用Vue全家桶。',
-          avatar: 'F'
-        },
-        {
-          name: 'FEBS-Actuator',
-          des: '使用Spring Boot Admin 2.0.2构建，用于监控FEBS。',
-          avatar: 'F'
-        }
-      ],
       todayIp: '',
       todayVisitCount: '',
       totalVisitCount: '',
@@ -214,21 +108,7 @@ export default {
       const date = new Date()
       const hour = date.getHours()
       let time = hour < 6 ? '早上好' : (hour <= 11 ? '上午好' : (hour <= 13 ? '中午好' : (hour <= 18 ? '下午好' : '晚上好')))
-      let welcomeArr = [
-        '喝杯咖啡休息下吧☕',
-        '要不要和朋友打局LOL',
-        '要不要和朋友打局王者荣耀',
-        '几天没见又更好看了呢😍',
-        '今天又写了几个Bug🐞呢',
-        '今天在群里吹水了吗',
-        '今天吃了什么好吃的呢',
-        '今天您微笑了吗😊',
-        '今天帮助别人解决问题了吗',
-        '准备吃些什么呢',
-        '周末要不要去看电影？'
-      ]
-      let index = Math.floor((Math.random() * welcomeArr.length))
-      return `${time}，${this.user.username}，${welcomeArr[index]}`
+      return `${time}，${this.user.username}`
     }
   },
   mounted () {
