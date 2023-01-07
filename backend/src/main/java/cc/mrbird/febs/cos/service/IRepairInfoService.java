@@ -36,4 +36,12 @@ public interface IRepairInfoService extends IService<RepairInfo> {
      * @return 结果
      */
     LinkedHashMap<String, Object> selectRepairDetail(String repairCode);
+
+    /**
+     * 根据员工获取维修信息
+     *
+     * @param userId userId
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectRepairByStaff(String userId);
 }

@@ -65,12 +65,15 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     public LinkedHashMap<String, Object> homeData(Long roleId, String userId) {
         LinkedHashMap<String, Object> result = new LinkedHashMap<>();
         // 管理员展示信息
-        if (roleId == 74) {
+        if (roleId == 73) {
             // 本月收益
-
+            BigDecimal incomeMonth = baseMapper.selectIncomeMonth();
             // 本月工单
+            Integer workOrderMonth = baseMapper.selectWorkOrderMonth();
             // 本月已完成
+            Integer completedWorkOrder = baseMapper.selectCompletedWorkOrder();
             // 维修工单
+            Integer completedRepairOrder = baseMapper.selectCompletedRepairOrder();
             // 客户数量
             Integer userNum = userInfoService.count();
             // 员工数量
@@ -87,6 +90,18 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
             List<LinkedHashMap<String, Object>> orderRecord = baseMapper.selectOrderRecord();
             // 工单服务类型统计
             List<LinkedHashMap<String, Object>> orderRate = baseMapper.selectOrderServiceTypeRate();
+            result.put("incomeMonth", incomeMonth);
+            result.put("workOrderMonth", workOrderMonth);
+            result.put("completedWorkOrder", completedWorkOrder);
+            result.put("completedRepairOrder", completedRepairOrder);
+            result.put("userNum", userNum);
+            result.put("staffNum", staffNum);
+            result.put("orderNum", orderNum);
+            result.put("amount", amount);
+            result.put("staffWorkStatus", staffWorkStatus);
+            result.put("paymentRecord", paymentRecord);
+            result.put("orderRecord", orderRecord);
+            result.put("orderRate", orderRate);
         }
         // 客户信息展示
         if (roleId == 75) {

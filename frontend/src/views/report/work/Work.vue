@@ -9,8 +9,8 @@
               <a-badge status="success" v-else/>
               <span style="font-size: 14px;font-family: SimHei">
                 {{ item.staff.name }}
-                <span v-if="item.repair !== undefined">【空闲】</span>
-                <span v-else>【工作】</span>
+                <span v-if="item.repair !== undefined">【工作】</span>
+                <span v-else>【空闲】</span>
               </span>
             </span>
           </a-card>

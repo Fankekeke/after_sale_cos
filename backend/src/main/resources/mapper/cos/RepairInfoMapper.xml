@@ -55,7 +55,7 @@
         FROM
         repair_info ri
         WHERE 1 = 1
-        ri.repair_status IN (0, 1, 2)
+        AND ri.repair_status IN (0, 1, 2)
     </select>
 
     <!-- 获取员工工作情况 -->
@@ -99,5 +99,30 @@
         WHERE
         1 = 1
         AND ri.repair_code = #{repairCode}
+    </select>
+
+    <!-- 根据员工获取维修信息 -->
+    <select id="selectRepairByStaff" resultType="cc.mrbird.febs.cos.entity.RepairInfo">
+        SELECT
+        ri.id,
+        ri.repair_code,
+        ri.staff_id,
+        ri.repair_status,
+        ri.remark,
+        ri.create_date,
+        oi.order_name,
+        pi1.id AS productId,
+        si.NAME AS staffName,
+        pi1.NAME AS productName,
+        pi1.`type` AS productType,
+        pi1.images
+        FROM
+        repair_info ri
+        LEFT JOIN staff_info si ON ( si.id = ri.staff_id )
+        LEFT JOIN order_info oi ON ( oi.repair_code = ri.repair_code )
+        LEFT JOIN product_info pi1 ON ( pi1.id = oi.product_id )
+        WHERE
+        1 = 1
+        AND ri.staff_id = #{staffId}
     </select>
 </mapper>

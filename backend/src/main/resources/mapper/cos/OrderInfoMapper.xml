@@ -119,21 +119,50 @@
 
     <!-- 本月收益 -->
     <select id="selectIncomeMonth" resultType="java.math.BigDecimal">
-
+        SELECT
+        IFNULL( SUM( pr.money ), 0 )
+        FROM
+        payment_record pr
+        WHERE
+        DATE_FORMAT( pr.create_date, '%Y%m' ) = DATE_FORMAT(
+        CURDATE(),
+        '%Y%m')
     </select>
 
     <!-- 本月工单 -->
     <select id="selectWorkOrderMonth" resultType="java.lang.Integer">
-
+        SELECT
+        IFNULL( count( 1 ), 0 )
+        FROM
+        order_info oi
+        WHERE
+        DATE_FORMAT( oi.create_date, '%Y%m' ) = DATE_FORMAT(
+        CURDATE(),
+        '%Y%m')
     </select>
 
     <!-- 本月已完成工单 -->
     <select id="selectCompletedWorkOrder" resultType="java.lang.Integer">
-
+        SELECT
+        IFNULL( count( 1 ), 0 )
+        FROM
+        order_info oi
+        WHERE
+        DATE_FORMAT( oi.create_date, '%Y%m' ) = DATE_FORMAT(
+        CURDATE(),
+        '%Y%m')
+        AND `status` = 6
     </select>
 
     <!-- 本月维修工单 -->
     <select id="selectCompletedRepairOrder" resultType="java.lang.Integer">
-
+        SELECT
+        IFNULL( count( 1 ), 0 )
+        FROM
+        repair_info ri
+        WHERE
+        DATE_FORMAT(ri.create_date, '%Y%m' ) = DATE_FORMAT(
+        CURDATE(),
+        '%Y%m')
     </select>
 </mapper>

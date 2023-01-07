@@ -21,24 +21,28 @@
             <a-row class="more-info">
               <a-col :span="4"></a-col>
               <a-col :span="4"></a-col>
-              <a-col :span="4"></a-col>
               <a-col :span="4">
-                <head-info title="今日IP" :content="todayIp" :center="false" :bordered="false"/>
+                <head-info title="客户数量" :content="titleData.userNum" :center="false" :bordered="false" v-if="user.roleId == 73"/>
               </a-col>
               <a-col :span="4">
-                <head-info title="今日访问" :content="todayVisitCount" :center="false" :bordered="false"/>
+                <head-info title="员工数量" :content="titleData.staffNum" :center="false" :bordered="false" v-if="user.roleId == 73"/>
               </a-col>
               <a-col :span="4">
-                <head-info title="总访问量" :content="totalVisitCount" :center="false" />
+                <head-info title="工单数量" :content="titleData.orderNum" :center="false" :bordered="false" v-if="user.roleId == 73"/>
+              </a-col>
+              <a-col :span="4">
+                <head-info title="缴费收益" :content="titleData.amount" :center="false" v-if="user.roleId == 73"/>
               </a-col>
             </a-row>
           </div>
         </a-col>
       </a-card>
     </a-row>
-    <a-row :gutter="8" class="count-info">
+    <work v-if="user.roleId == 75"></work>
+    <home @setTitle="setTitleData"></home>
+    <a-row :gutter="8" class="count-info" style="margin-top: 15px" v-show="user.roleId == 73">
       <a-col :span="12" class="visit-count-wrapper">
-        <a-card class="visit-count">
+        <a-card class="visit-count" hoverable>
           <apexchart ref="count" type=bar height=300 :options="chartOptions" :series="series" />
         </a-card>
       </a-col>
@@ -49,13 +53,21 @@
 import HeadInfo from '@/views/common/HeadInfo'
 import {mapState} from 'vuex'
 import moment from 'moment'
+import Home from './manage/component/home/Home'
+import Work from './manage/component/work/Work'
 moment.locale('zh-cn')
 
 export default {
   name: 'HomePage',
-  components: {HeadInfo},
+  components: {Work, Home, HeadInfo},
   data () {
     return {
+      titleData: {
+        userNum: 0,
+        staffNum: 0,
+        orderNum: 0,
+        amount: 0
+      },
       series: [],
       chartOptions: {
         chart: {
@@ -109,6 +121,9 @@ export default {
       const hour = date.getHours()
       let time = hour < 6 ? '早上好' : (hour <= 11 ? '上午好' : (hour <= 13 ? '中午好' : (hour <= 18 ? '下午好' : '晚上好')))
       return `${time}，${this.user.username}`
+    },
+    setTitleData (titleData) {
+      this.titleData = titleData
     }
   },
   mounted () {

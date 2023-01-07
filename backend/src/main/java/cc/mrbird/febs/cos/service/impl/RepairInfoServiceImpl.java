@@ -1,22 +1,32 @@
 package cc.mrbird.febs.cos.service.impl;
 
+import cc.mrbird.febs.cos.dao.StaffInfoMapper;
 import cc.mrbird.febs.cos.entity.RepairInfo;
 import cc.mrbird.febs.cos.dao.RepairInfoMapper;
+import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IRepairInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author FanK
  */
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RepairInfoServiceImpl extends ServiceImpl<RepairInfoMapper, RepairInfo> implements IRepairInfoService {
+
+    private final StaffInfoMapper staffInfoMapper;
 
     /**
      * 分页获取维修信息
@@ -55,5 +65,24 @@ public class RepairInfoServiceImpl extends ServiceImpl<RepairInfoMapper, RepairI
     @Override
     public LinkedHashMap<String, Object> selectRepairDetail(String repairCode) {
         return baseMapper.selectRepairDetail(repairCode);
+    }
+
+    /**
+     * 根据员工获取维修信息
+     *
+     * @param userId userId
+     * @return 结果
+     */
+    @Override
+    public LinkedHashMap<String, Object> selectRepairByStaff(String userId) {
+        // 获取员工信息
+        StaffInfo staffInfo = staffInfoMapper.selectOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, userId));
+        LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>();
+        List<RepairInfo> repairInfoList = baseMapper.selectRepairByStaff(staffInfo.getId());
+        // 维修任务列表
+        result.put("repairList", repairInfoList);
+        // 待接受任务
+        result.put("accept", repairInfoList.stream().filter(e -> e.getRepairStatus() == 0).collect(Collectors.toList()));
+        return result;
     }
 }

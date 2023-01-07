@@ -2,14 +2,17 @@
   <div>
     <a-row style="margin-top: 15px">
       <a-col :span="24">
-        <div style="background: #ECECEC; padding: 30px;">
+        <div style="background: #ECECEC; padding: 30px;" v-if="user.roleId == 73">
           <a-row :gutter="16">
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
                   <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月收益/元</a-col>
-                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 20px;margin-top: 3px"/></a-col>
-                  <a-col :span="18" style="font-size: 18px;font-weight: 500;font-family: SimHei">{{ titleData.monthAmount }}</a-col>
+                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
+                    {{ titleData.incomeMonth }}
+                    <span style="font-size: 20px;margin-top: 3px">元</span>
+                  </a-col>
                 </a-row>
               </a-card>
             </a-col>
@@ -17,8 +20,11 @@
               <a-card hoverable>
                 <a-row>
                   <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月工单</a-col>
-                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 20px;margin-top: 3px"/></a-col>
-                  <a-col :span="18" style="font-size: 18px;font-weight: 500;font-family: SimHei">{{ titleData.monthRent }}</a-col>
+                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
+                    {{ titleData.workOrderMonth }}
+                    <span style="font-size: 20px;margin-top: 3px">单</span>
+                  </a-col>
                 </a-row>
               </a-card>
             </a-col>
@@ -26,8 +32,11 @@
               <a-card hoverable>
                 <a-row>
                   <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">已完成</a-col>
-                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 20px;margin-top: 3px"/></a-col>
-                  <a-col :span="18" style="font-size: 18px;font-weight: 500;font-family: SimHei">{{ titleData.monthRentOut }}</a-col>
+                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
+                    {{ titleData.completedWorkOrder }}
+                    <span style="font-size: 20px;margin-top: 3px">单</span>
+                  </a-col>
                 </a-row>
               </a-card>
             </a-col>
@@ -35,8 +44,11 @@
               <a-card hoverable>
                 <a-row>
                   <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">维修工单</a-col>
-                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 20px;margin-top: 3px"/></a-col>
-                  <a-col :span="18" style="font-size: 18px;font-weight: 500;font-family: SimHei">{{ titleData.allAmount }}</a-col>
+                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
+                    {{ titleData.completedRepairOrder }}
+                    <span style="font-size: 20px;margin-top: 3px">单</span>
+                  </a-col>
                 </a-row>
               </a-card>
             </a-col>
@@ -44,7 +56,7 @@
         </div>
       </a-col>
     </a-row>
-    <a-row style="margin-top: 15px">
+    <a-row style="margin-top: 15px" v-if="user.roleId == 73">
       <a-col :span="12">
         <a-card hoverable :bordered="false" style="width: 100%">
           <a-skeleton active v-if="loading" />
@@ -58,7 +70,7 @@
         </a-card>
       </a-col>
     </a-row>
-    <a-row style="margin-top: 15px">
+    <a-row style="margin-top: 15px" v-if="user.roleId == 73">
       <a-col :span="9">
         <a-card hoverable :bordered="false" style="width: 100%">
           <a-skeleton active v-if="loading" />
@@ -72,29 +84,40 @@
         </a-card>
       </a-col>
     </a-row>
-    <a-card hoverable :loading="loading" title="公告信息">
-      <div>
-        <a-list item-layout="vertical" :pagination="pagination" :data-source="bulletinList">
-          <a-list-item slot="renderItem" key="item.title" slot-scope="item, index">
-            <template slot="actions">
+    <a-row style="margin-top: 15px">
+      <a-col :span="12">
+        <a-card hoverable :loading="loading" :bordered="false" title="公告信息" style="margin-top: 15px">
+          <div style="padding: 0 22px">
+            <a-list item-layout="vertical" :pagination="pagination" :data-source="bulletinList">
+              <a-list-item slot="renderItem" key="item.title" slot-scope="item, index">
+                <template slot="actions">
               <span key="message">
                 <a-icon type="message" style="margin-right: 8px" />
                 {{ item.date }}
               </span>
-            </template>
-            <a-list-item-meta :description="item.content" style="font-size: 14px">
-              <a slot="title">{{ item.title }}</a>
-            </a-list-item-meta>
-          </a-list-item>
-        </a-list>
-      </div>
-    </a-card>
+                </template>
+                <a-list-item-meta :description="item.content" style="font-size: 14px">
+                  <a slot="title">{{ item.title }}</a>
+                </a-list-item-meta>
+              </a-list-item>
+            </a-list>
+          </div>
+        </a-card>
+      </a-col>
+    </a-row>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
   name: 'Home',
+  computed: {
+    ...mapState({
+      multipage: state => state.setting.multipage,
+      user: state => state.account.user
+    })
+  },
   data () {
     return {
       pagination: {
@@ -105,13 +128,14 @@ export default {
       },
       bulletinList: [],
       titleData: {
-        monthAmount: 0,
-        monthRent: 0,
-        monthRentOut: 0,
-        allAmount: 0
+        incomeMonth: 0,
+        workOrderMonth: 0,
+        completedWorkOrder: 0,
+        completedRepairOrder: 0
       },
       loading: false,
       series: [{
+        name: '收益',
         data: []
       }],
       chartOptions: {
@@ -145,7 +169,7 @@ export default {
           height: 300
         },
         title: {
-          text: '近十天房源省份统计',
+          text: '近十天工单统计',
           align: 'left'
         },
         plotOptions: {
@@ -167,7 +191,7 @@ export default {
         },
         yaxis: {
           title: {
-            text: '$ (thousands)'
+            text: ''
           }
         },
         fill: {
@@ -176,7 +200,7 @@ export default {
         tooltip: {
           y: {
             formatter: function (val) {
-              return '$ ' + val + ' thousands'
+              return val + ' 单'
             }
           }
         }
@@ -189,7 +213,7 @@ export default {
         },
         labels: ['整租', '合租'],
         title: {
-          text: '近十天房屋合租类型统计',
+          text: '工单服务类型统计',
           align: 'left'
         },
         responsive: [{
@@ -254,37 +278,27 @@ export default {
   methods: {
     selectHomeData () {
       this.$get('/cos/order-info/home/data', {roleId: this.user.roleId, userId: this.user.userId}).then((r) => {
-        this.titleData.monthAmount = r.data.monthAmount
-        this.titleData.monthRent = r.data.monthRent
-        this.titleData.monthRentOut = r.data.monthRentOut
-        this.titleData.allAmount = r.data.allAmount
+        let titleData = { userNum: r.data.userNum, staffNum: r.data.staffNum, orderNum: r.data.orderNum, amount: r.data.amount }
+        this.$emit('setTitle', titleData)
+        this.titleData.incomeMonth = r.data.incomeMonth
+        this.titleData.workOrderMonth = r.data.workOrderMonth
+        this.titleData.completedWorkOrder = r.data.completedWorkOrder
+        this.titleData.completedRepairOrder = r.data.completedRepairOrder
+        this.bulletinList = r.data.bulletin
         let values = []
-        if (r.data.provinceRent !== null) {
-          Object.keys(r.data.provinceRent).forEach(e => {
-            if (this.chartOptions1.xaxis.categories.length === 0) {
-              this.chartOptions1.xaxis.categories = r.data.provinceRent[e].map(obj => { return obj.days })
-            }
-            let itemData = { name: e, data: r.data.provinceRent[e].map(obj => { return obj.count }) }
-            values.push(itemData)
-          })
+        if (r.data.orderRecord !== null && r.data.orderRecord.length !== 0) {
+          if (this.chartOptions1.xaxis.categories.length === 0) {
+            this.chartOptions1.xaxis.categories = r.data.orderRecord.map(obj => { return obj.days })
+          }
+          let itemData = { name: '订单数', data: r.data.orderRecord.map(obj => { return obj.count }) }
+          values.push(itemData)
           this.series1 = values
         }
-        this.series[0].data = r.data.rentPayment.map(obj => { return obj.price })
-        this.chartOptions.xaxis.categories = r.data.rentPayment.map(obj => { return obj.days })
-        let type1 = 0
-        let type2 = 0
-        if (r.data.typeList.length === 0) {
-          this.series2 = [type1, type2]
-          console.log(this.series2)
-        } else {
-          r.data.typeList.forEach(e => {
-            if (e.rentType === 1) {
-              type1 = e.count
-            } else {
-              type2 = e.count
-            }
-          })
-          this.series2 = [type1, type2]
+        this.series[0].data = r.data.paymentRecord.map(obj => { return obj.amount })
+        this.chartOptions.xaxis.categories = r.data.paymentRecord.map(obj => { return obj.days })
+        if (r.data.orderRate.length !== 0) {
+          this.series2 = r.data.orderRate.map(obj => { return obj.count })
+          this.chartOptions2.labels = r.data.orderRate.map(obj => { return obj.name })
         }
       })
     }

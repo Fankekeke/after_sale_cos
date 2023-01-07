@@ -37,6 +37,17 @@ public class RepairInfoController {
     }
 
     /**
+     * 根据员工获取维修信息
+     *
+     * @param userId userId
+     * @return 结果
+     */
+    @GetMapping("/list/staff/{userId}")
+    public R selectRepairByStaff(@PathVariable("userId") String userId) {
+        return R.ok(repairInfoService.selectRepairByStaff(userId));
+    }
+
+    /**
      * 维修单详情
      *
      * @param repairCode 维修编号
