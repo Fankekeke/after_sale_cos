@@ -2,15 +2,19 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.OrderInfo;
 import cc.mrbird.febs.cos.entity.UserInfo;
+import cc.mrbird.febs.cos.service.IOrderInfoService;
 import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -23,6 +27,8 @@ public class UserInfoController {
 
     private final IUserInfoService userInfoService;
 
+    private final IOrderInfoService orderInfoService;
+
     /**
      * 分页获取客户信息
      *
@@ -33,6 +39,22 @@ public class UserInfoController {
     @GetMapping("/page")
     public R page(Page<UserInfo> page, UserInfo userInfo) {
         return R.ok(userInfoService.selectUserPage(page, userInfo));
+    }
+
+    /**
+     * 用户信息详情
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/detail/{userId}")
+    public R detail(@PathVariable("userId") Long userId) {
+        LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>();
+        result.put("user", userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, userId)));
+        // 用户工单
+        List<OrderInfo> orderInfoList = orderInfoService.list(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getCustomerId, userId));
+        result.put("order", orderInfoList);
+        return R.ok(result);
     }
 
     /**

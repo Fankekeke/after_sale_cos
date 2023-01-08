@@ -22,6 +22,7 @@
         LEFT JOIN staff_info si ON ( si.id = ri.staff_id )
         LEFT JOIN order_info oi ON ( oi.repair_code = ri.repair_code )
         LEFT JOIN product_info pi1 ON ( pi1.id = oi.product_id )
+        LEFT JOIN user_info ui ON (ui.id = oi.customer_id)
         WHERE
         1 = 1
         <if test="repairInfo.repairCode != null and repairInfo.repairCode != ''">
@@ -38,6 +39,9 @@
         </if>
         <if test="repairInfo.userId != null">
             AND si.user_id = #{repairInfo.userId}
+        </if>
+        <if test="repairInfo.clientId != null">
+            AND ui.user_id = #{repairInfo.clientId}
         </if>
         ORDER BY
         ri.create_date DESC

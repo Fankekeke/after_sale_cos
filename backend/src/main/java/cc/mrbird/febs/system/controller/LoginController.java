@@ -165,7 +165,7 @@ public class LoginController {
             @NotBlank(message = "{required}") String username,
             @NotBlank(message = "{required}") String password,
             @NotBlank(message = "{required}") String name) throws Exception {
-        this.userService.regist(username, password, name);
+        this.userService.registUser(username, password, name);
     }
 
     private String saveTokenToRedis(User user, JWTToken token, HttpServletRequest request) throws Exception {

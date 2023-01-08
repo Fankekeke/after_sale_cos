@@ -40,7 +40,7 @@
             AND ui.name LIKE CONCAT('%',#{orderInfo.userName},'%')
         </if>
         <if test="orderInfo.userId != null">
-            AND oi.status = #{orderInfo.userId}
+            AND ui.user_id = #{orderInfo.userId}
         </if>
         ORDER BY
         oi.create_date DESC

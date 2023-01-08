@@ -56,4 +56,5 @@ public class PaymentRecord implements Serializable {
 
     @TableField(exist = false)
     private Integer serverType;
+
 }
