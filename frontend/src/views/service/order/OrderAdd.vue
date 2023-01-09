@@ -11,49 +11,33 @@
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
         <a-col :span="12">
-          <a-form-item label='公告标题' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'title',
-            { rules: [{ required: true, message: '请输入名称!' }] }
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='上传人' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'publisher',
-            { rules: [{ required: true, message: '请输入上传人!' }] }
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='公告类型' v-bind="formItemLayout">
-            <a-select v-decorator="[
-              'type',
-              { rules: [{ required: true, message: '请输入公告类型!' }] }
-              ]">
-              <a-select-option value="1">通知</a-select-option>
-              <a-select-option value="2">公告</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='公告状态' v-bind="formItemLayout">
-            <a-select v-decorator="[
-              'rackUp',
-              { rules: [{ required: true, message: '请输入公告状态!' }] }
-              ]">
-              <a-select-option value="0">下架</a-select-option>
-              <a-select-option value="1">已发布</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="24">
-          <a-form-item label='公告内容' v-bind="formItemLayout">
+          <a-col :span="24">
+          <a-form-item label='售后内容' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
-            'content',
-             { rules: [{ required: true, message: '请输入名称!' }] }
+            'remark',
+             { rules: [{ required: true, message: '请输入售后内容!' }] }
             ]"/>
+          </a-form-item>
+        </a-col>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='服务类型' v-bind="formItemLayout">
+            <a-select v-decorator="[
+              'serverType',
+              { rules: [{ required: true, message: '请输入服务类型!' }] }
+              ]">
+              <a-select-option v-for="(item, index) in serviceSortList" :value="item.id" :key="index">{{ item.name }}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+         <a-col :span="12">
+          <a-form-item label='售后产品' v-bind="formItemLayout">
+            <a-select v-decorator="[
+              'productId',
+              { rules: [{ required: true, message: '请输入服务类型!' }] }
+              ]">
+              <a-select-option v-for="(item, index) in productList" :value="item.label" :key="index">{{ item.value }}</a-select-option>
+            </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -123,10 +107,26 @@ export default {
       loading: false,
       fileList: [],
       previewVisible: false,
-      previewImage: ''
+      previewImage: '',
+      serviceSortList: [],
+      productList: []
     }
   },
+  mounted () {
+    this.getServiceSort()
+    this.getProduct()
+  },
   methods: {
+    getServiceSort () {
+      this.$get(`/cos/service-sort/list`).then((r) => {
+          this.serviceSortList = r.data.data
+      })
+    },
+    getProduct () {
+      this.$get(`/cos/product-info/list`).then((r) => {
+          this.productList = r.data.data
+      })
+    },
     handleCancel () {
       this.previewVisible = false
     },
@@ -157,7 +157,7 @@ export default {
       this.form.validateFields((err, values) => {
         values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
-          values.publisher = this.currentUser.userId
+          values.userId = this.currentUser.userId
           this.loading = true
           this.$post('/cos/order-info', {
             ...values

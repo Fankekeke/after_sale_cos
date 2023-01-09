@@ -81,7 +81,7 @@
         </template>
         <template slot="operation" slot-scope="text, record">
           <a-icon type="file-search" @click="orderViewOpen(record)" title="详 情"></a-icon>
-
+          <a-icon v-if="record.status == 2" type="alipay" @click="pay(record)" title="支 付"></a-icon>
         </template>
       </a-table>
     </div>
@@ -230,6 +230,23 @@ export default {
     this.fetch()
   },
   methods: {
+    pay (row) {
+      let data = { outTradeNo: row.orderCode, subject: `${row.orderName}`, totalAmount: row.money, body: '' }
+      this.$post('/cos/pay/alipay', data).then((r) => {
+        // console.log(r.data.msg)
+        // 添加之前先删除一下，如果单页面，页面不刷新，添加进去的内容会一直保留在页面中，二次调用form表单会出错
+        const divForm = document.getElementsByTagName('div')
+        if (divForm.length) {
+          document.body.removeChild(divForm[0])
+        }
+        const div = document.createElement('div')
+        div.innerHTML = r.data.msg // data就是接口返回的form 表单字符串
+        // console.log(div.innerHTML)
+        document.body.appendChild(div)
+        document.forms[0].setAttribute('target', '_self') // 新开窗口跳转
+        document.forms[0].submit()
+      })
+    },
     orderAuditOpen (row) {
       this.orderAuditView.data = row
       this.orderAuditView.visiable = true

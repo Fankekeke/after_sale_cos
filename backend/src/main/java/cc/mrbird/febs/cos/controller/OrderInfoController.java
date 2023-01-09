@@ -3,7 +3,9 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.OrderInfo;
+import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IOrderInfoService;
+import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,6 +26,8 @@ import java.util.List;
 public class OrderInfoController {
 
     private final IOrderInfoService orderInfoService;
+
+    private final IUserInfoService userInfoService;
 
     /**
      * 分页获取工单信息
@@ -105,8 +109,12 @@ public class OrderInfoController {
      */
     @PostMapping
     public R save(OrderInfo orderInfo) {
+        // 查询用户信息
+        UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, orderInfo.getUserId()));
+        orderInfo.setCustomerId(userInfo.getId());
         orderInfo.setOrderCode("ORD-" + System.currentTimeMillis());
         orderInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        orderInfo.setStatus(0);
         return R.ok(orderInfoService.save(orderInfo));
     }
 

@@ -26,13 +26,23 @@ public class ServiceSortController {
     /**
      * 分页获取服务类型信息
      *
-     * @param page 分页对象
+     * @param page        分页对象
      * @param serviceSort 服务类型信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<ServiceSort> page, ServiceSort serviceSort) {
         return R.ok(serviceSortService.selectServiceSortPage(page, serviceSort));
+    }
+
+    /**
+     * 获取服务类型信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/list")
+    public R list() {
+        return R.ok(serviceSortService.list());
     }
 
     /**
