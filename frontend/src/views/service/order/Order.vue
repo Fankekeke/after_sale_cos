@@ -81,7 +81,7 @@
         </template>
         <template slot="operation" slot-scope="text, record">
           <a-icon type="file-search" @click="orderViewOpen(record)" title="详 情"></a-icon>
-          <a-icon v-if="record.status == 2" type="alipay" @click="pay(record)" title="支 付"></a-icon>
+          <a-icon v-if="record.status == 2" type="alipay" @click="pay(record)" title="支 付" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
@@ -104,7 +104,7 @@ import RangeDate from '@/components/datetime/RangeDate'
 import {mapState} from 'vuex'
 import moment from 'moment'
 import OrderView from './OrderView'
-import OrderAdd from "./OrderAdd";
+import OrderAdd from './OrderAdd'
 moment.locale('zh-cn')
 
 export default {

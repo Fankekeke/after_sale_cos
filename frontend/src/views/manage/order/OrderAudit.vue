@@ -220,18 +220,27 @@ export default {
         this.auditData.reserveDate = moment(new Date()).format('YYYY-MM-DD')
       }
       this.$get(`/cos/order-info/distribute`, {
-        'orderName': this.orderAuditData.orderName,
+        'orderName': this.auditData.orderName,
         'orderCode': this.orderAuditData.orderCode,
         'staffId': this.auditData.staffId,
         'date': this.auditData.reserveDate,
         'money': this.auditData.price,
         'remark': this.auditData.remark
       }).then((r) => {
+        this.cleanData()
         this.$emit('success')
       })
     },
     onClose () {
+      this.cleanData()
       this.$emit('close')
+    },
+    cleanData () {
+      this.auditData.orderName = ''
+      this.auditData.staffId = null
+      this.auditData.price = 0
+      this.auditData.reserveDate = ''
+      this.auditData.remark = ''
     }
   }
 }

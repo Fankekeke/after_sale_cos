@@ -13,7 +13,7 @@
         <a-col :span="12">
           <a-col :span="24">
           <a-form-item label='售后内容' v-bind="formItemLayout">
-            <a-textarea :rows="6" v-decorator="[
+            <a-textarea :rows="5" v-decorator="[
             'remark',
              { rules: [{ required: true, message: '请输入售后内容!' }] }
             ]"/>
@@ -36,7 +36,7 @@
               'productId',
               { rules: [{ required: true, message: '请输入服务类型!' }] }
               ]">
-              <a-select-option v-for="(item, index) in productList" :value="item.label" :key="index">{{ item.value }}</a-select-option>
+              <a-select-option v-for="(item, index) in productList" :value="item.value" :key="index">{{ item.label }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
@@ -119,12 +119,12 @@ export default {
   methods: {
     getServiceSort () {
       this.$get(`/cos/service-sort/list`).then((r) => {
-          this.serviceSortList = r.data.data
+        this.serviceSortList = r.data.data
       })
     },
     getProduct () {
       this.$get(`/cos/product-info/list`).then((r) => {
-          this.productList = r.data.data
+        this.productList = r.data.data
       })
     },
     handleCancel () {

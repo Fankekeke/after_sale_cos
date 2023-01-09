@@ -51,8 +51,9 @@ public class UserInfoController {
     public R detail(@PathVariable("userId") Long userId) {
         LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>();
         result.put("user", userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, userId)));
+        UserInfo user = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, userId));
         // 用户工单
-        List<OrderInfo> orderInfoList = orderInfoService.list(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getCustomerId, userId));
+        List<OrderInfo> orderInfoList = orderInfoService.list(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getCustomerId, user.getId()));
         result.put("order", orderInfoList);
         return R.ok(result);
     }

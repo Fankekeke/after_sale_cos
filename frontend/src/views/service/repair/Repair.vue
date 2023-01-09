@@ -352,7 +352,7 @@ export default {
       if (params.repairStatus === undefined) {
         delete params.repairStatus
       }
-      params.userId = this.currentUser.userId
+      params.clientId = this.currentUser.userId
       this.$get('/cos/repair-info/page', {
         ...params
       }).then((r) => {
