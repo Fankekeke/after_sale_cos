@@ -1,9 +1,91 @@
 ### 基于SpringBoot的产品售后服务系统
 
+#### 安装环境
 
+JAVA 环境 
+
+Node.js环境 [https://nodejs.org/en/] 选择14.17
+
+Yarn 打开cmd， 输入npm install -g yarn !!!必须安装完毕nodejs
+
+Mysql 数据库 [https://blog.csdn.net/qq_40303031/article/details/88935262] 一定要把账户和密码记住
+
+redis
+
+Idea 编译器 [https://blog.csdn.net/weixin_44505194/article/details/104452880]
+
+WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
+
+#### 采用技术及功能
+
+后端：SpringBoot、MybatisPlus、MySQL、Redis、
+前端：Vue、Apex、Antd、Axios
+报表：Spread.js
+
+平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件)
+
+平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)
+
+开发环境：windows10 or windows7 ， vscode or webstorm ， idea + lambok 支付的话用支付宝的沙箱
+
+#### 管理员
+1、用户管理
+2、员工管理
+3、评价管理
+4、服务类型
+5、预约管理
+6、维修信息
+7、产品信息
+8、缴费记录
+9、工单管理
+10、公告信息
+
+#### 客户
+1.我的工单
+2.个人信息
+3.缴费记录
+4.维修信息
+
+#### 维修员
+1.我的任务
 产品售后服务系统
 
 我国信息产业、企业售后服务发展迅速,电商的发展超出了所有人都想象，与此同时也带来了诸多的问题。飞速发展的交易额，带来了大量的GDP增长，然而光鲜的背后是每天无数客服手忙脚乱的为顾客服务。由于顾客对自身生活质量要求越来越高，售后管理业必须随着人们生活水平的提高而改变。伴随着购物规模的不断扩大，售后的各项反馈、投诉，对售后的要求等都将越来越复杂，售后管理系统的自身的管理工作量也将越来越大。人工服务不能做到及时有效的反映，以及做出正确的应对以及保存，迫切需要一个系统来解决这些问题。本项目的出发点力在解决这一困难！
+
+#### 前台启动方式
+
+安装所需文件 yarn install 
+运行 yarn run dev
+
+#### 默认后台账户密码
+
+[管理员]
+admin
+1234qwer
+
+[业主]
+fank
+1234qwer
+
+#### 项目截图
+
+暂无
+
+
+#### 演示视频
+
+暂无
+
+#### 获取方式
+
+Email: fan1ke2ke@gmail.com
+
+WeChat: `Storm_Berserker`
+
+#### 接JAVAWEB毕设，纯原创，价格公道，诚信第一
+
+More info: [悲伤的橘子树](https://berserker287.github.io/)
+
 
 关键词： Java技术；产品售后；管理系统
 
