@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -51,12 +52,17 @@ public class PaymentRecordController {
      * @return 结果
      */
     @PostMapping
+    @Transactional(rollbackFor = Exception.class)
     public R save(PaymentRecord paymentRecord) {
         UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, paymentRecord.getUserId()));
         paymentRecord.setUserId(userInfo.getId());
+        // 获取工单信息
         OrderInfo orderInfo = orderInfoService.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getOrderCode, paymentRecord.getOrderCode()));
         paymentRecord.setMoney(orderInfo.getMoney());
+        paymentRecord.setServerType(orderInfo.getServerType());
         paymentRecord.setCreateDate(DateUtil.formatDateTime(new Date()));
+        // 更新工单状态为正在维修
+        orderInfoService.update(Wrappers.<OrderInfo>lambdaUpdate().set(OrderInfo::getStatus, 3).eq(OrderInfo::getOrderCode, orderInfo.getOrderCode()));
         return R.ok(paymentRecordService.save(paymentRecord));
     }
 

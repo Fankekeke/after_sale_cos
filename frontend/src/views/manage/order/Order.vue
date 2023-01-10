@@ -81,7 +81,7 @@
         <template slot="operation" slot-scope="text, record">
           <a-icon type="file-search" @click="orderViewOpen(record)" title="详 情"></a-icon>
           <a-icon v-if="record.status == 0" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="修 改" style="margin-left: 15px"></a-icon>
-
+          <a-icon v-if="record.status == 3" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderStatusOpen(record)" title="修 改" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
@@ -91,6 +91,12 @@
       :orderAuditShow="orderAuditView.visiable"
       :orderAuditData="orderAuditView.data">
     </order-audit>
+    <order-status
+      @close="handleorderStatusViewClose"
+      @success="handleorderStatusViewSuccess"
+      :orderStatusShow="orderStatusView.visiable"
+      :orderStatusData="orderStatusView.data">
+    </order-status>
     <order-view
       @close="handleorderViewClose"
       :orderShow="orderView.visiable"
@@ -105,11 +111,12 @@ import {mapState} from 'vuex'
 import moment from 'moment'
 import OrderAudit from './OrderAudit'
 import OrderView from './OrderView'
+import OrderStatus from './OrderStatus.vue'
 moment.locale('zh-cn')
 
 export default {
   name: 'order',
-  components: {OrderView, OrderAudit, RangeDate},
+  components: {OrderView, OrderAudit, RangeDate, OrderStatus},
   data () {
     return {
       advanced: false,
@@ -120,6 +127,10 @@ export default {
         visiable: false
       },
       orderView: {
+        visiable: false,
+        data: null
+      },
+      orderStatusView: {
         visiable: false,
         data: null
       },
@@ -230,6 +241,10 @@ export default {
     this.fetch()
   },
   methods: {
+    orderStatusOpen (row) {
+      this.orderStatusView.data = row
+      this.orderStatusView.visiable = true
+    },
     orderAuditOpen (row) {
       this.orderAuditView.data = row
       this.orderAuditView.visiable = true
@@ -240,6 +255,14 @@ export default {
     },
     handleorderViewClose () {
       this.orderView.visiable = false
+    },
+    handleorderStatusViewClose () {
+      this.orderStatusView.visiable = false
+    },
+    handleorderStatusViewSuccess () {
+      this.orderStatusView.visiable = false
+      this.$message.success('修改成功')
+      this.fetch()
     },
     handleorderAuditViewClose () {
       this.orderAuditView.visiable = false

@@ -2,13 +2,16 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.OrderInfo;
 import cc.mrbird.febs.cos.entity.RepairInfo;
+import cc.mrbird.febs.cos.service.IOrderInfoService;
 import cc.mrbird.febs.cos.service.IRepairInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -23,6 +26,8 @@ import java.util.List;
 public class RepairInfoController {
 
     private final IRepairInfoService repairInfoService;
+
+    private final IOrderInfoService orderInfoService;
 
     /**
      * 分页获取维修信息
@@ -66,7 +71,15 @@ public class RepairInfoController {
      * @return 结果
      */
     @GetMapping("/edit/status")
+    @Transactional(rollbackFor = Exception.class)
     public R editRepairStatus(@RequestParam("repairId") Integer repairId, @RequestParam("status") Integer status) {
+        RepairInfo repairInfo = repairInfoService.getById(repairId);
+        // 获取工单信息
+        OrderInfo orderInfo = orderInfoService.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getRepairCode, repairInfo.getRepairCode()));
+        // 更新工单状态为缴费
+        if (status == 1) {
+            orderInfoService.update(Wrappers.<OrderInfo>lambdaUpdate().set(OrderInfo::getStatus, 2).eq(OrderInfo::getOrderCode, orderInfo.getOrderCode()));
+        }
         return R.ok(repairInfoService.update(Wrappers.<RepairInfo>lambdaUpdate().set(RepairInfo::getRepairStatus, status).eq(RepairInfo::getId, repairId)));
     }
 

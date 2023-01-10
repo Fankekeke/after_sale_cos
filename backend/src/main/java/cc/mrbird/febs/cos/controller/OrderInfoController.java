@@ -53,6 +53,18 @@ public class OrderInfoController {
     }
 
     /**
+     * 修改工单状态
+     *
+     * @param orderCode 工单编号
+     * @param status    status
+     * @return 结果
+     */
+    @GetMapping("/set/status")
+    public R setOrderStatus(@RequestParam("orderCode") String orderCode, @RequestParam("status") Integer status) {
+        return R.ok(orderInfoService.update(Wrappers.<OrderInfo>lambdaUpdate().set(OrderInfo::getStatus, status).eq(OrderInfo::getOrderCode, orderCode)));
+    }
+
+    /**
      * 工单分配
      *
      * @param staffId 员工ID
