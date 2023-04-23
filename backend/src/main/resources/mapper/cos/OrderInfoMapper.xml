@@ -20,11 +20,13 @@
         oi.create_date,
         ui.name as userName,
         ui.phone,
-        ss.name AS serverTypeName
+        ss.name AS serverTypeName,
+        se.id AS evaluationFlag
         FROM
         order_info oi
         LEFT JOIN user_info ui ON ( ui.id = oi.customer_id )
         LEFT JOIN service_sort ss ON (ss.id = oi.server_type)
+        LEFT JOIN staff_evaluation se ON (se.order_code = oi.order_code)
         WHERE
         1 = 1
         <if test="orderInfo.orderCode != null and orderInfo.orderCode != ''">

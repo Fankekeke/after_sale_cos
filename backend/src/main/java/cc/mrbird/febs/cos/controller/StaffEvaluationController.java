@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -64,6 +66,8 @@ public class StaffEvaluationController {
      */
     @PostMapping
     public R save(StaffEvaluation staffEvaluation) {
+        BigDecimal allScore = staffEvaluation.getRepairScore().add(staffEvaluation.getScheduleScore()).add(staffEvaluation.getServiceScore());
+        staffEvaluation.setScore(allScore.divide(BigDecimal.valueOf(3), 0, RoundingMode.HALF_UP));
         staffEvaluation.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(staffEvaluationService.save(staffEvaluation));
     }

@@ -80,7 +80,8 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="file-search" @click="orderViewOpen(record)" title="详 情"></a-icon>
+          <a-icon v-if="record.status == 4 && record.evaluationFlag == null " type="coffee" @click="orderEvaluateOpen(record)" title="评 价"></a-icon>
+          <a-icon type="file-search" @click="orderViewOpen(record)" title="详 情" style="margin-left: 15px"></a-icon>
           <a-icon v-if="record.status == 2" type="alipay" @click="pay(record)" title="支 付" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
@@ -96,6 +97,13 @@
       @success="handleorderAddSuccess"
       :orderAddVisiable="orderAdd.visiable">
     </order-add>
+    <order-evaluate
+      v-if="orderEvaluate.visiable"
+      @close="handleorderEvaluateClose"
+      @success="handleorderEvaluateSuccess"
+      :orderAddVisiable="orderEvaluate.visiable"
+      :orderData="orderEvaluate.data">
+    </order-evaluate>
   </a-card>
 </template>
 
@@ -105,16 +113,21 @@ import {mapState} from 'vuex'
 import moment from 'moment'
 import OrderView from './OrderView'
 import OrderAdd from './OrderAdd'
+import OrderEvaluate from './OrderEvaluate.vue'
 moment.locale('zh-cn')
 
 export default {
   name: 'order',
-  components: {OrderAdd, OrderView, RangeDate},
+  components: {OrderEvaluate, OrderAdd, OrderView, RangeDate},
   data () {
     return {
       advanced: false,
       orderAdd: {
         visiable: false
+      },
+      orderEvaluate: {
+        visiable: false,
+        data: null
       },
       orderEdit: {
         visiable: false
@@ -255,6 +268,10 @@ export default {
       this.orderView.data = row
       this.orderView.visiable = true
     },
+    orderEvaluateOpen (row) {
+      this.orderEvaluate.data = row
+      this.orderEvaluate.visiable = true
+    },
     handleorderViewClose () {
       this.orderView.visiable = false
     },
@@ -278,9 +295,17 @@ export default {
     handleorderAddClose () {
       this.orderAdd.visiable = false
     },
+    handleorderEvaluateClose () {
+      this.orderEvaluate.visiable = false
+    },
     handleorderAddSuccess () {
       this.orderAdd.visiable = false
-      this.$message.success('新增产品成功')
+      this.$message.success('新增成功')
+      this.search()
+    },
+    handleorderEvaluateSuccess () {
+      this.orderEvaluate.visiable = false
+      this.$message.success('评价成功')
       this.search()
     },
     edit (record) {
