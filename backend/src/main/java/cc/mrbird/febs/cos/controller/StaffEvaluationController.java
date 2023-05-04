@@ -32,6 +32,7 @@ public class StaffEvaluationController {
      * @param staffEvaluation 员工评价信息
      * @return 结果
      */
+    @ApiOperation(value = "分页获取员工评价信息", notes = "分页获取员工评价信息")
     @GetMapping("/page")
     public R page(Page<StaffEvaluation> page, StaffEvaluation staffEvaluation) {
         return R.ok(staffEvaluationService.selectEvaluatePage(page, staffEvaluation));
@@ -42,6 +43,7 @@ public class StaffEvaluationController {
      *
      * @return 结果
      */
+    @ApiOperation(value = "员工评价统计", notes = "员工评价统计")
     @GetMapping("/staff/evaluate")
     public R selectEvaluateListByStaff() {
         return R.ok(staffEvaluationService.selectEvaluateListByStaff());
@@ -53,6 +55,7 @@ public class StaffEvaluationController {
      * @param staffId 员工ID
      * @return 结果
      */
+    @ApiOperation(value = "根据员工查询综合评价信息", notes = "根据员工查询综合评价信息")
     @GetMapping("/score/staff/{staffId}")
     public R selectEvaluateByStaff(@PathVariable("staffId") Integer staffId) {
         return R.ok(staffEvaluationService.selectEvaluateByStaff(staffId));
@@ -64,6 +67,7 @@ public class StaffEvaluationController {
      * @param staffEvaluation 员工评价信息
      * @return 结果
      */
+    @ApiOperation(value = "新增员工评价信息", notes = "新增员工评价信息")
     @PostMapping
     public R save(StaffEvaluation staffEvaluation) {
         BigDecimal allScore = staffEvaluation.getRepairScore().add(staffEvaluation.getScheduleScore()).add(staffEvaluation.getServiceScore());
@@ -78,6 +82,7 @@ public class StaffEvaluationController {
      * @param staffEvaluation 员工评价信息
      * @return 结果
      */
+    @ApiOperation(value = "修改员工评价信息", notes = "修改员工评价信息")
     @PutMapping
     public R edit(StaffEvaluation staffEvaluation) {
         return R.ok(staffEvaluationService.updateById(staffEvaluation));
@@ -89,6 +94,7 @@ public class StaffEvaluationController {
      * @param ids ids
      * @return 员工评价信息
      */
+    @ApiOperation(value = "删除员工评价信息", notes = "删除员工评价信息")
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(staffEvaluationService.removeByIds(ids));

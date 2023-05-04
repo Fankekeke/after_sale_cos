@@ -36,6 +36,7 @@ public class RepairInfoController {
      * @param repairInfo 维修信息
      * @return 结果
      */
+    @ApiOperation(value = "分页获取维修信息", notes = "分页获取维修信息")
     @GetMapping("/page")
     public R page(Page<RepairInfo> page, RepairInfo repairInfo) {
         return R.ok(repairInfoService.selectRepairPage(page, repairInfo));
@@ -47,6 +48,7 @@ public class RepairInfoController {
      * @param userId userId
      * @return 结果
      */
+    @ApiOperation(value = "根据员工获取维修信息", notes = "根据员工获取维修信息")
     @GetMapping("/list/staff/{userId}")
     public R selectRepairByStaff(@PathVariable("userId") String userId) {
         return R.ok(repairInfoService.selectRepairByStaff(userId));
@@ -58,6 +60,7 @@ public class RepairInfoController {
      * @param repairCode 维修编号
      * @return 结果
      */
+    @ApiOperation(value = "维修单详情", notes = "维修单详情")
     @GetMapping("/detail/{repairCode}")
     public R selectRepairDetail(@PathVariable("repairCode") String repairCode) {
         return R.ok(repairInfoService.selectRepairDetail(repairCode));
@@ -70,6 +73,7 @@ public class RepairInfoController {
      * @param status   状态
      * @return 结果
      */
+    @ApiOperation(value = "修改维修单状态", notes = "修改维修单状态")
     @GetMapping("/edit/status")
     @Transactional(rollbackFor = Exception.class)
     public R editRepairStatus(@RequestParam("repairId") Integer repairId, @RequestParam("status") Integer status) {
@@ -89,6 +93,7 @@ public class RepairInfoController {
      * @param repairInfo 维修信息
      * @return 结果
      */
+    @ApiOperation(value = "新增维修信息", notes = "新增维修信息")
     @PostMapping
     public R save(RepairInfo repairInfo) {
         repairInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
@@ -101,6 +106,7 @@ public class RepairInfoController {
      * @param repairInfo 维修信息
      * @return 结果
      */
+    @ApiOperation(value = "修改维修信息", notes = "修改维修信息")
     @PutMapping
     public R edit(RepairInfo repairInfo) {
         return R.ok(repairInfoService.updateById(repairInfo));
@@ -112,6 +118,7 @@ public class RepairInfoController {
      * @param ids ids
      * @return 维修信息
      */
+    @ApiOperation(value = "删除维修信息", notes = "删除维修信息")
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(repairInfoService.removeByIds(ids));

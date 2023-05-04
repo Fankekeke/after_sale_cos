@@ -40,6 +40,7 @@ public class PaymentRecordController {
      * @param paymentRecord 缴费记录信息
      * @return 结果
      */
+    @ApiOperation(value = "分页获取缴费记录信息", notes = "分页获取缴费记录信息")
     @GetMapping("/page")
     public R page(Page<PaymentRecord> page, PaymentRecord paymentRecord) {
         return R.ok(paymentRecordService.selectPaymentRecordPage(page, paymentRecord));
@@ -52,6 +53,7 @@ public class PaymentRecordController {
      * @return 结果
      */
     @PostMapping
+    @ApiOperation(value = "新增缴费记录信息", notes = "新增缴费记录信息")
     @Transactional(rollbackFor = Exception.class)
     public R save(PaymentRecord paymentRecord) {
         UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, paymentRecord.getUserId()));
@@ -72,6 +74,7 @@ public class PaymentRecordController {
      * @param paymentRecord 缴费记录信息
      * @return 结果
      */
+    @ApiOperation(value = "修改缴费记录信息", notes = "修改缴费记录信息")
     @PutMapping
     public R edit(PaymentRecord paymentRecord) {
         return R.ok(paymentRecordService.updateById(paymentRecord));
@@ -83,6 +86,7 @@ public class PaymentRecordController {
      * @param ids ids
      * @return 缴费记录信息
      */
+    @ApiOperation(value = "删除缴费记录信息", notes = "删除缴费记录信息")
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(paymentRecordService.removeByIds(ids));

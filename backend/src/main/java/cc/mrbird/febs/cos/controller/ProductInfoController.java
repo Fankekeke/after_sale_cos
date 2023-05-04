@@ -32,6 +32,7 @@ public class ProductInfoController {
      * @param productInfo 产品信息
      * @return 结果
      */
+    @ApiOperation(value = "分页获取产品信息", notes = "分页获取产品信息")
     @GetMapping("/page")
     public R page(Page<ProductInfo> page, ProductInfo productInfo) {
         return R.ok(productInfoService.selectProductPage(page, productInfo));
@@ -43,6 +44,7 @@ public class ProductInfoController {
      * @param productId 产品ID
      * @return 结果
      */
+    @ApiOperation(value = "查询产品详情", notes = "查询产品详情")
     @GetMapping("/detail/{productId}")
     public R detail(@PathVariable("productId") Integer productId) {
         return R.ok(productInfoService.getById(productId));
@@ -53,6 +55,7 @@ public class ProductInfoController {
      *
      * @return 结果
      */
+    @ApiOperation(value = "查询所有产品信息", notes = "查询所有产品信息")
     @GetMapping("/list")
     public R list() {
         List<ProductInfo> productInfoList = productInfoService.list();
@@ -74,6 +77,7 @@ public class ProductInfoController {
      * @param productInfo 产品信息
      * @return 结果
      */
+    @ApiOperation(value = "新增产品信息", notes = "新增产品信息")
     @PostMapping
     public R save(ProductInfo productInfo) {
         productInfo.setCode("P-" + System.currentTimeMillis());
@@ -87,6 +91,7 @@ public class ProductInfoController {
      * @param productInfo 产品信息
      * @return 结果
      */
+    @ApiOperation(value = "修改产品信息", notes = "修改产品信息")
     @PutMapping
     public R edit(ProductInfo productInfo) {
         return R.ok(productInfoService.updateById(productInfo));
@@ -98,6 +103,7 @@ public class ProductInfoController {
      * @param ids ids
      * @return 产品信息
      */
+    @ApiOperation(value = "删除产品信息", notes = "删除产品信息")
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(productInfoService.removeByIds(ids));

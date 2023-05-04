@@ -30,6 +30,8 @@ public class CustomerInfoController {
      * @param customerInfo 客户信息
      * @return 结果
      */
+    @ApiOperation(value = "分页获取客户信息", notes = "分页获取客户信息")
+    @ApiImplicitParam(name = "customerInfo", value = "客户信息", required = true, dataType = "CustomerInfo")
     @GetMapping("/page")
     public R page(Page<CustomerInfo> page, CustomerInfo customerInfo) {
         return R.ok();
@@ -41,6 +43,8 @@ public class CustomerInfoController {
      * @param customerInfo 客户信息
      * @return 结果
      */
+    @ApiOperation(value = "新增客户信息", notes = "新增客户信息")
+    @ApiImplicitParam(name = "customerInfo", value = "客户信息", required = true, dataType = "CustomerInfo")
     @PostMapping
     public R save(CustomerInfo customerInfo) {
         customerInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
@@ -53,6 +57,8 @@ public class CustomerInfoController {
      * @param customerInfo 客户信息
      * @return 结果
      */
+    @ApiOperation(value = "修改客户信息", notes = "修改客户信息")
+    @ApiImplicitParam(name = "customerInfo", value = "客户信息", required = true, dataType = "CustomerInfo")
     @PutMapping
     public R edit(CustomerInfo customerInfo) {
         return R.ok(customerInfoService.updateById(customerInfo));

@@ -36,6 +36,8 @@ public class OrderInfoController {
      * @param orderInfo 工单信息
      * @return 结果
      */
+    @ApiOperation(value = "分页获取工单信息", notes = "分页获取工单信息")
+    @ApiImplicitParam(name = "orderInfo", value = "工单信息", required = true, dataType = "OrderInfo")
     @GetMapping("/page")
     public R page(Page<OrderInfo> page, OrderInfo orderInfo) {
         return R.ok(orderInfoService.selectOrderPage(page, orderInfo));
@@ -47,6 +49,8 @@ public class OrderInfoController {
      * @param orderCode 工单编号
      * @return 结果
      */
+    @ApiOperation(value = "工单驳回", notes = "工单驳回")
+    @ApiImplicitParam(name = "orderCode", value = "工单编号", required = true, dataType = "String")
     @GetMapping("/reject/{orderCode}")
     public R rejectOrder(@PathVariable("orderCode") String orderCode) {
         return R.ok(orderInfoService.update(Wrappers.<OrderInfo>lambdaUpdate().set(OrderInfo::getStatus, 7).eq(OrderInfo::getOrderCode, orderCode)));
@@ -59,6 +63,7 @@ public class OrderInfoController {
      * @param status    status
      * @return 结果
      */
+    @ApiOperation(value = "修改工单状态", notes = "修改工单状态")
     @GetMapping("/set/status")
     public R setOrderStatus(@RequestParam("orderCode") String orderCode, @RequestParam("status") Integer status) {
         return R.ok(orderInfoService.update(Wrappers.<OrderInfo>lambdaUpdate().set(OrderInfo::getStatus, status).eq(OrderInfo::getOrderCode, orderCode)));
@@ -73,6 +78,7 @@ public class OrderInfoController {
      * @param remark  备注
      * @return 结果
      */
+    @ApiOperation(value = "工单分配", notes = "工单分配")
     @GetMapping("/distribute")
     public R orderDistribute(@RequestParam("orderName") String orderName, @RequestParam("orderCode") String orderCode, @RequestParam("staffId") Integer staffId, @RequestParam("date") String date, @RequestParam("money") BigDecimal amount, @RequestParam("remark") String remark) {
         return R.ok(orderInfoService.orderDistribute(orderName, orderCode, staffId, date, amount, remark));
@@ -84,6 +90,7 @@ public class OrderInfoController {
      * @param repairCode 维修编号
      * @return 结果
      */
+    @ApiOperation(value = "根据维修编号获取工单信息", notes = "根据维修编号获取工单信息")
     @GetMapping("/detail/repair/{repairCode}")
     public R selectOrderDetail(@PathVariable("repairCode") String repairCode) {
         return R.ok(orderInfoService.selectOrderDetail(repairCode));
@@ -96,6 +103,7 @@ public class OrderInfoController {
      * @param userId 用户ID
      * @return 结果
      */
+    @ApiOperation(value = "查询主页信息", notes = "查询主页信息")
     @GetMapping("/home/data")
     public R homeData(@RequestParam("roleId") Long roleId, @RequestParam("userId") String userId) {
         return R.ok(orderInfoService.homeData(roleId, userId));
@@ -108,6 +116,7 @@ public class OrderInfoController {
      * @param staffId   员工ID
      * @return 结果
      */
+    @ApiOperation(value = "工单绑定维修人员", notes = "工单绑定维修人员")
     @GetMapping("/bind/repair")
     public R setOrderRepairUser(@RequestParam("orderCode") String orderCode, @RequestParam("staffId") Integer staffId) {
         return R.ok(orderInfoService.setOrderRepairUser(orderCode, staffId));
@@ -119,6 +128,7 @@ public class OrderInfoController {
      * @param orderInfo 工单信息
      * @return 结果
      */
+    @ApiOperation(value = "新增工单信息", notes = "新增工单信息")
     @PostMapping
     public R save(OrderInfo orderInfo) {
         // 查询用户信息
@@ -136,6 +146,7 @@ public class OrderInfoController {
      * @param orderInfo 工单信息
      * @return 结果
      */
+    @ApiOperation(value = "修改工单信息", notes = "修改工单信息")
     @PutMapping
     public R edit(OrderInfo orderInfo) {
         return R.ok(orderInfoService.updateById(orderInfo));
@@ -147,6 +158,7 @@ public class OrderInfoController {
      * @param ids ids
      * @return 工单信息
      */
+    @ApiOperation(value = "删除工单信息", notes = "删除工单信息")
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(orderInfoService.removeByIds(ids));

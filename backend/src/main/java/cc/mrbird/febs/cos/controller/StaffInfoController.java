@@ -34,6 +34,7 @@ public class StaffInfoController {
      * @return 结果
      */
     @GetMapping("/page")
+    @ApiOperation(value = "分页获取员工信息", notes = "分页获取员工信息")
     public R page(Page<StaffInfo> page, StaffInfo staffInfo) {
         return R.ok(staffInfoService.selectStaffPage(page, staffInfo));
     }
@@ -44,6 +45,7 @@ public class StaffInfoController {
      * @param staffId 员工ID
      * @return 结果
      */
+    @ApiOperation(value = "查询员工信息详情", notes = "查询员工信息详情")
     @GetMapping("/detail/{staffId}")
     public R selectStaffById(@PathVariable("staffId") Integer staffId) {
         return R.ok(staffInfoService.getById(staffId));
@@ -54,6 +56,7 @@ public class StaffInfoController {
      *
      * @return 结果
      */
+    @ApiOperation(value = "查询员工工作状态", notes = "查询员工工作状态")
     @GetMapping("/workStatus")
     public R selectStaffWorkStatus() {
         return R.ok(staffInfoService.selectStaffWorkStatus());
@@ -64,6 +67,7 @@ public class StaffInfoController {
      *
      * @return 结果
      */
+    @ApiOperation(value = "查询所有员工信息", notes = "查询所有员工信息")
     @GetMapping("/list")
     public R list() {
         return R.ok(staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStatus, 1)));
@@ -75,6 +79,7 @@ public class StaffInfoController {
      * @param staffInfo 员工信息
      * @return 结果
      */
+    @ApiOperation(value = "新增员工信息", notes = "新增员工信息")
     @PostMapping
     public R save(StaffInfo staffInfo) throws Exception {
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
@@ -87,6 +92,7 @@ public class StaffInfoController {
      * @param productId 产品ID
      * @return 结果
      */
+    @ApiOperation(value = "获取员工工作情况", notes = "获取员工工作情况")
     @GetMapping("/work/{productId}")
     public R selectStaffWork(@PathVariable(value = "productId", required = false) Integer productId) {
         return R.ok(staffInfoService.selectStaffWork(productId));
@@ -99,6 +105,7 @@ public class StaffInfoController {
      * @param status  状态
      * @return 结果
      */
+    @ApiOperation(value = "更新员工状态", notes = "更新员工状态")
     @PostMapping("/account/status")
     public R accountStatusEdit(@RequestParam("staffId") Integer staffId, @RequestParam("status") Integer status) throws Exception {
         return R.ok(staffInfoService.accountStatusEdit(staffId, status));
@@ -110,6 +117,7 @@ public class StaffInfoController {
      * @param staffInfo 员工信息
      * @return 结果
      */
+    @ApiOperation(value = "修改员工信息", notes = "修改员工信息")
     @PutMapping
     public R edit(StaffInfo staffInfo) {
         return R.ok(staffInfoService.updateById(staffInfo));
@@ -121,6 +129,7 @@ public class StaffInfoController {
      * @param ids ids
      * @return 员工信息
      */
+    @ApiOperation(value = "删除员工信息", notes = "删除员工信息")
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(staffInfoService.removeByIds(ids));

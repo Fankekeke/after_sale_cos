@@ -31,6 +31,7 @@ public class ReserveInfoController {
      * @param reserveInfo 预约信息
      * @return 结果
      */
+    @ApiOperation(value = "分页获取预约信息", notes = "分页获取预约信息")
     @GetMapping("/page")
     public R page(Page<ReserveInfo> page, ReserveInfo reserveInfo) {
         return R.ok(reserveInfoService.selectReservePage(page, reserveInfo));
@@ -42,6 +43,7 @@ public class ReserveInfoController {
      * @param orderCode 工单编号
      * @return 结果
      */
+    @ApiOperation(value = "查询预约详情", notes = "查询预约详情")
     @GetMapping("/detail/{orderCode}")
     public R selectReserveDetail(@PathVariable("orderCode") String orderCode) {
         return R.ok(reserveInfoService.getOne(Wrappers.<ReserveInfo>lambdaQuery().eq(ReserveInfo::getOrderCode, orderCode)));
@@ -54,6 +56,7 @@ public class ReserveInfoController {
      * @param status    状态
      * @return 结果
      */
+    @ApiOperation(value = "修改预约信息状态", notes = "修改预约信息状态")
     @GetMapping("/edit/status")
     public R editReserveStatus(@RequestParam("reserveId") Integer reserveId, @RequestParam("status") Integer status) {
         return R.ok(reserveInfoService.update(Wrappers.<ReserveInfo>lambdaUpdate().set(ReserveInfo::getOpenFlag, status).eq(ReserveInfo::getId, reserveId)));
@@ -65,6 +68,7 @@ public class ReserveInfoController {
      * @param reserveInfo 预约信息
      * @return 结果
      */
+    @ApiOperation(value = "新增预约信息", notes = "新增预约信息")
     @PostMapping
     public R save(ReserveInfo reserveInfo) {
         reserveInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
@@ -77,6 +81,7 @@ public class ReserveInfoController {
      * @param reserveInfo 预约信息
      * @return 结果
      */
+    @ApiOperation(value = "修改预约信息", notes = "修改预约信息")
     @PutMapping
     public R edit(ReserveInfo reserveInfo) {
         return R.ok(reserveInfoService.updateById(reserveInfo));
@@ -88,6 +93,7 @@ public class ReserveInfoController {
      * @param ids ids
      * @return 预约信息
      */
+    @ApiOperation(value = "删除预约信息", notes = "删除预约信息")
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(reserveInfoService.removeByIds(ids));

@@ -30,6 +30,7 @@ public class ServiceSortController {
      * @param serviceSort 服务类型信息
      * @return 结果
      */
+    @ApiOperation(value = "分页获取服务类型信息", notes = "分页获取服务类型信息")
     @GetMapping("/page")
     public R page(Page<ServiceSort> page, ServiceSort serviceSort) {
         return R.ok(serviceSortService.selectServiceSortPage(page, serviceSort));
@@ -40,6 +41,7 @@ public class ServiceSortController {
      *
      * @return 结果
      */
+    @ApiOperation(value = "获取服务类型信息", notes = "获取服务类型信息")
     @GetMapping("/list")
     public R list() {
         return R.ok(serviceSortService.list());
@@ -51,6 +53,7 @@ public class ServiceSortController {
      * @param serviceSort 服务类型信息
      * @return 结果
      */
+    @ApiOperation(value = "新增服务类型信息", notes = "新增服务类型信息")
     @PostMapping
     public R save(ServiceSort serviceSort) {
         serviceSort.setCreateDate(DateUtil.formatDateTime(new Date()));
@@ -63,6 +66,7 @@ public class ServiceSortController {
      * @param serviceSort 服务类型信息
      * @return 结果
      */
+    @ApiOperation(value = "修改服务类型信息", notes = "修改服务类型信息")
     @PutMapping
     public R edit(ServiceSort serviceSort) {
         return R.ok(serviceSortService.updateById(serviceSort));
@@ -74,6 +78,7 @@ public class ServiceSortController {
      * @param ids ids
      * @return 服务类型信息
      */
+    @ApiOperation(value = "删除服务类型信息", notes = "删除服务类型信息")
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(serviceSortService.removeByIds(ids));

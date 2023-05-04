@@ -36,6 +36,7 @@ public class UserInfoController {
      * @param userInfo 客户信息
      * @return 结果
      */
+    @ApiOperation(value = "分页获取客户信息", notes = "分页获取客户信息")
     @GetMapping("/page")
     public R page(Page<UserInfo> page, UserInfo userInfo) {
         return R.ok(userInfoService.selectUserPage(page, userInfo));
@@ -47,6 +48,7 @@ public class UserInfoController {
      * @param userId 用户ID
      * @return 结果
      */
+    @ApiOperation(value = "用户信息详情", notes = "用户信息详情")
     @GetMapping("/detail/{userId}")
     public R detail(@PathVariable("userId") Long userId) {
         LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>();
@@ -65,6 +67,7 @@ public class UserInfoController {
      * @param status 状态
      * @return 结果
      */
+    @ApiOperation(value = "更新客户状态", notes = "更新客户状态")
     @PostMapping("/account/status")
     public R accountStatusEdit(@RequestParam("userId") Integer userId, @RequestParam("status") Integer status) throws Exception {
         return R.ok(userInfoService.accountStatusEdit(userId, status));
@@ -76,6 +79,7 @@ public class UserInfoController {
      * @param userInfo 客户信息
      * @return 结果
      */
+    @ApiOperation(value = "新增客户信息", notes = "新增客户信息")
     @PostMapping
     public R save(UserInfo userInfo) {
         userInfo.setCode("U-" + System.currentTimeMillis());
@@ -89,6 +93,7 @@ public class UserInfoController {
      * @param userInfo 客户信息
      * @return 结果
      */
+    @ApiOperation(value = "修改客户信息", notes = "修改客户信息")
     @PutMapping
     public R edit(UserInfo userInfo) {
         return R.ok(userInfoService.updateById(userInfo));
