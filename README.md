@@ -1,4 +1,4 @@
-### 基于SpringBoot的产品售后服务系统
+### 基于SpringBoot + Vue的产品售后服务系统
 
 #### 安装环境
 
